@@ -1,3 +1,5 @@
+'use strict';
+/*
 for (let i = 0; i <= 5; i++) {
   if (i === 1) {
     continue;
@@ -44,3 +46,19 @@ switch (value) {
   default:
     console.log(`Нічо`);
 }
+*/
+
+console.log(addOne(1, 5));
+function addOne(a, b) {
+  return a + b;
+}
+
+const add2 = function (a, b) {
+  return a + b;
+};
+
+console.log(add2(234, 22));
+
+const add3 = (a, b) => a + b;
+
+console.log(add3(1111111, 222));
