@@ -115,68 +115,136 @@ const temperatures2 = [13, -12, -16, -11, `error`, 19, 11, 11, 11, 114, 19, 51];
 
 //Coding Challenge #2
 
-const testArray = [8, 8, 6.5, 0, 8, 4, 0];
+// const testArray = [8, 8, 6.5, 0, 8, 4, 0];
 
-const timeTrackApp = function (arr) {
-  const data = {
-    sum: 0,
-    avg: 0,
-    highDay: [],
-    highDayNew: [],
-    numberDays: 0,
-    fullTime: false,
-  };
-  let max = arr[0];
+// const timeTrackApp = function (arr) {
+//   const data = {
+//     sum: 0,
+//     avg: 0,
+//     highDay: [],
+//     highDayNew: [],
+//     numberDays: 0,
+//     fullTime: false,
+//   };
+//   let max = arr[0];
 
-  for (let i = 0; i < arr.length; i++) {
-    data.sum += arr[i]; // Sum
-    if (max < arr[i]) max = arr[i]; // Max hours
-    if (arr[i] > 0) data.numberDays++; // Number days
-  }
-  data.avg = data.sum / data.numberDays; // Average hours
-  if (data.sum >= 35) data.fullTime = true; // Full Time
+//   for (let i = 0; i < arr.length; i++) {
+//     data.sum += arr[i]; // Sum
+//     if (max < arr[i]) max = arr[i]; // Max hours
+//     if (arr[i] > 0) data.numberDays++; // Number days
+//   }
+//   data.avg = data.sum / data.numberDays; // Average hours
+//   if (data.sum >= 35) data.fullTime = true; // Full Time
 
-  for (let i = arr.indexOf(max); i < arr.length; i++) {
-    if (arr[i] === max) {
-      switch (i + 1) {
-        case 1:
-          data.highDay.push(`Monday`);
-          break;
-        case 2:
-          data.highDay.push(`Tuesday`);
-          break;
-        case 3:
-          data.highDay.push(`Wednesday`);
-          break;
-        case 4:
-          data.highDay.push(`Thursday`);
-          break;
-        case 5:
-          data.highDay.push(`Friday`);
-          break;
-        case 6:
-          data.highDay.push(`Saturday`);
-          break;
-        case 7:
-          data.highDay.push(`Sunday`);
-          break;
-      }
-    }
-  } // NumberDays
+//   for (let i = arr.indexOf(max); i < arr.length; i++) {
+//     if (arr[i] === max) {
+//       switch (i + 1) {
+//         case 1:
+//           data.highDay.push(`Monday`);
+//           break;
+//         case 2:
+//           data.highDay.push(`Tuesday`);
+//           break;
+//         case 3:
+//           data.highDay.push(`Wednesday`);
+//           break;
+//         case 4:
+//           data.highDay.push(`Thursday`);
+//           break;
+//         case 5:
+//           data.highDay.push(`Friday`);
+//           break;
+//         case 6:
+//           data.highDay.push(`Saturday`);
+//           break;
+//         case 7:
+//           data.highDay.push(`Sunday`);
+//           break;
+//       }
+//     }
+//   } // NumberDays
 
-  const days7 = [
-    `Monday`,
-    `Tuesday`,
-    `Wednesday`,
-    `Thursday`,
-    `Friday`,
-    `Saturday`,
-    `Sunday`,
+//   const days7 = [
+//     `Monday`,
+//     `Tuesday`,
+//     `Wednesday`,
+//     `Thursday`,
+//     `Friday`,
+//     `Saturday`,
+//     `Sunday`,
+//   ];
+
+//   for (let i = 0; i < arr.length; i++) {
+//     if (arr[i] === max) data.highDayNew.push(days7[i]);
+//   }
+//   return data;
+// };
+// console.log(timeTrackApp(testArray));
+
+function analyzeWeek(hoursPerDay) {
+  const daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === max) data.highDayNew.push(days7[i]);
+  // Перевірка: масив існує і не пустий
+  if (!Array.isArray(hoursPerDay) || hoursPerDay.length === 0) {
+    return {
+      totalHours: 0,
+      averageDailyHours: 0,
+      mostWorkedDays: [],
+      daysWorked: 0,
+      fullTime: false,
+    };
   }
-  return data;
-};
-console.log(timeTrackApp(testArray));
+
+  // Загальна кількість відпрацьованих годин
+  const totalHours = hoursPerDay.reduce((sum, hours) => sum + hours, 0);
+
+  // Перевірка: чи є хоча б 1 година роботи
+  if (totalHours < 1) {
+    return {
+      totalHours,
+      averageDailyHours: 0,
+      mostWorkedDays: [],
+      daysWorked: 0,
+      fullTime: false,
+    };
+  }
+
+  // Кількість днів, коли працювали більше 0 годин
+  const daysWorked = hoursPerDay.filter(hours => hours > 0).length;
+
+  // Середня кількість годин на день (округлення до десятих)
+  const averageDailyHours = Number(
+    (totalHours / hoursPerDay.length).toFixed(1)
+  );
+
+  // Знаходимо максимальну кількість годин за день
+  const maxHours = Math.max(...hoursPerDay);
+
+  // Знаходимо всі дні з максимальною кількістю годин
+  const mostWorkedDays = hoursPerDay
+    .map((hours, index) => (hours === maxHours ? daysOfWeek[index] : null))
+    .filter(day => day !== null);
+
+  // Повний робочий тиждень (35 годин або більше)
+  const fullTime = totalHours >= 35;
+
+  // Повертаємо фінальний об'єкт
+  return {
+    totalHours,
+    averageDailyHours,
+    mostWorkedDays,
+    daysWorked,
+    fullTime,
+  };
+}
+
+const testData = [8, 8, 7, 0, 8, 4, 0];
+console.log(analyzeWeek(testData));

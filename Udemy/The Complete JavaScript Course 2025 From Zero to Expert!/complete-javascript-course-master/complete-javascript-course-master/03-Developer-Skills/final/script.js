@@ -173,7 +173,6 @@ Let's say you're building a time tracking application for freelancers. At some p
 TEST DATA: [7.5, 8, 6.5, 0, 8.5, 4, 0]
 */
 
-/*
 // Written by ChatGPT
 function analyzeWorkWeek(dailyHours) {
   const daysOfWeek = [
@@ -218,11 +217,10 @@ function analyzeWorkWeek(dailyHours) {
   };
 }
 
-const weeklyHours = [7.5, 8, 6.5, 0, 8.5, 5, 0];
+const weeklyHours = [7.5, 8.5, 6.5, 0, 8.5, 5, 0];
 const analysis = analyzeWorkWeek(weeklyHours);
 console.log(analysis);
 
-const weeklyHours2 = [7.5, 8, 6.5, 0, 8.5];
-const analysis2 = analyzeWorkWeek(weeklyHours2);
-console.log(analysis2);
-*/
+// const weeklyHours2 = [7.5, 8, 6.5, 0, 8.5];
+// const analysis2 = analyzeWorkWeek(weeklyHours2);
+// console.log(analysis2);
