@@ -115,20 +115,68 @@ const temperatures2 = [13, -12, -16, -11, `error`, 19, 11, 11, 11, 114, 19, 51];
 
 //Coding Challenge #2
 
-const testArray = [7.5, 8, 6.5, 0, 8.5, 4, 0];
+const testArray = [8, 8, 6.5, 0, 8, 4, 0];
 
 const timeTrackApp = function (arr) {
   const data = {
     sum: 0,
     avg: 0,
-    highDay: ``,
+    highDay: [],
+    highDayNew: [],
     numberDays: 0,
     fullTime: false,
   };
+  let max = arr[0];
 
   for (let i = 0; i < arr.length; i++) {
-    data.sum += arr[i];
+    data.sum += arr[i]; // Sum
+    if (max < arr[i]) max = arr[i]; // Max hours
+    if (arr[i] > 0) data.numberDays++; // Number days
   }
-  console.log(data.sum);
+  data.avg = data.sum / data.numberDays; // Average hours
+  if (data.sum >= 35) data.fullTime = true; // Full Time
+
+  for (let i = arr.indexOf(max); i < arr.length; i++) {
+    if (arr[i] === max) {
+      switch (i + 1) {
+        case 1:
+          data.highDay.push(`Monday`);
+          break;
+        case 2:
+          data.highDay.push(`Tuesday`);
+          break;
+        case 3:
+          data.highDay.push(`Wednesday`);
+          break;
+        case 4:
+          data.highDay.push(`Thursday`);
+          break;
+        case 5:
+          data.highDay.push(`Friday`);
+          break;
+        case 6:
+          data.highDay.push(`Saturday`);
+          break;
+        case 7:
+          data.highDay.push(`Sunday`);
+          break;
+      }
+    }
+  } // NumberDays
+
+  const days7 = [
+    `Monday`,
+    `Tuesday`,
+    `Wednesday`,
+    `Thursday`,
+    `Friday`,
+    `Saturday`,
+    `Sunday`,
+  ];
+
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === max) data.highDayNew.push(days7[i]);
+  }
+  return data;
 };
-timeTrackApp(testArray);
+console.log(timeTrackApp(testArray));
