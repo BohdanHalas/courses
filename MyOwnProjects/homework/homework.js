@@ -48,17 +48,35 @@ switch (value) {
 }
 */
 
-console.log(addOne(1, 5));
-function addOne(a, b) {
-  return a + b;
-}
+// console.log(addOne(1, 5));
+// function addOne(a, b) {
+//   return a + b;
+// }
 
-const add2 = function (a, b) {
-  return a + b;
+// const add2 = function (a, b) {
+//   return a + b;
+// };
+
+// console.log(add2(234, 22));
+
+// const add3 = (a, b) => a + b;
+
+// console.log(add3(1111111, 222));
+
+const UPL = {
+  name: [`Dynamo`, `Shakhtar`, `Dnipro`],
+  titles: [`Cup of Ukraine`, `Premier League`, `SuperCup`],
+  valueTeams: 14,
+  top10inEU: false,
+  championPredict: function () {
+    console.log(this.name[Math.floor(Math.random() * 3)]);
+  },
 };
 
-console.log(add2(234, 22));
+const gold10 = 10;
+const teams = `Teams`;
+console.log(UPL.valueTeams);
+console.log(UPL[`top` + gold10 + `inEU`]);
+console.log(UPL[`value` + teams]);
 
-const add3 = (a, b) => a + b;
-
-console.log(add3(1111111, 222));
+UPL.championPredict();
