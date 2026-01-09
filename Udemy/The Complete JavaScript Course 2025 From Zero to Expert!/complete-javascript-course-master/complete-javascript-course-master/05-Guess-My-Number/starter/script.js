@@ -14,6 +14,12 @@ let score = 20;
 let corr = false;
 let highScore = 0;
 
+// Simulation press Enter
+document.querySelector(`.guess`).addEventListener(`keydown`, function (e) {
+  if (e.key === `Enter`) {
+    document.querySelector(`.btn.check`).click();
+  }
+});
 document.querySelector(`.btn.check`).addEventListener(`click`, function () {
   // Function when WrongAnswer + GameOver;
   const wrongAnswer = function () {
