@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blackjack: Гра в 21</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <section class="player player--0 player--active">
+        <h2 class="name" id="name--0">Гравець 1</h2>
+        <p class="score" id="score--0">0</p>
+
+        <div class="current-label">Поточні карти</div>
+        <div class="current-hand" id="current--0"></div>
+      </section>
+
+      <section class="player player--1">
+        <h2 class="name" id="name--1">Гравець 2</h2>
+        <p class="score" id="score--1">0</p>
+
+        <div class="current-label">Поточні карти</div>
+        <div class="current-hand" id="current--1"></div>
+      </section>
+
+      <button class="btn btn--new">🔄 Нова гра</button>
+
+      <button class="btn btn--roll">🃏 Взяти карту</button>
+
+      <button class="btn btn--hold">✋ Досить</button>
+
+      <img src="back_cover.jpg" alt="Deck" class="deck-img" />
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

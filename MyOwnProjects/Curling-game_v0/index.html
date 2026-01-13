@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curling Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-container">
+    <!-- Top bar with new game button and round scores -->
+    <header class="top-bar">
+      <button class="btn-new-game" id="btnNewGame">Нова гра</button>
+      
+      <div class="round-score">
+        <div class="round-score-player">
+          <span class="round-score-value" id="roundScore1">0</span>
+        </div>
+        <div class="round-score-label">
+          <span>Загальний рахунок</span>
+          <span>(по раундах)</span>
+        </div>
+        <div class="round-score-player">
+          <span class="round-score-value" id="roundScore2">0</span>
+        </div>
+      </div>
+    </header>
+
+    <h1 class="game-title">🥌 Curling Simulator</h1>
+    
+    <div class="game-board">
+      <!-- Player 1 -->
+      <section class="player player-1 active" id="player1">
+        <div class="player-header">
+          <span class="player-icon">🔴</span>
+          <h2>Гравець 1</h2>
+        </div>
+        <div class="player-stats">
+          <div class="stat">
+            <span class="stat-label">Відстань до центру</span>
+            <span class="stat-value" id="distance1">—</span>
+          </div>
+        </div>
+        <div class="stone-indicator">
+          <img src="images/stone-red.jpg" alt="Red Stone" class="stone-img" id="stone1">
+        </div>
+      </section>
+
+      <!-- Curling House (Target) with moving stone -->
+      <section class="curling-house">
+        <div class="house-container">
+          <div class="ring ring-blue"></div>
+          <div class="ring ring-white"></div>
+          <div class="ring ring-red"></div>
+          <div class="ring ring-center"></div>
+          <div class="button-center"></div>
+          
+          <!-- Stone positions on house -->
+          <div class="stone-on-house stone-red hidden" id="stonePos1"></div>
+          <div class="stone-on-house stone-yellow hidden" id="stonePos2"></div>
+        </div>
+        
+        <!-- Moving stone that goes up on sweep - replaces track -->
+        <div class="moving-stone-container">
+          <div class="moving-stone" id="movingStone"></div>
+        </div>
+      </section>
+
+      <!-- Player 2 -->
+      <section class="player player-2" id="player2">
+        <div class="player-header">
+          <span class="player-icon">🟡</span>
+          <h2>Гравець 2</h2>
+        </div>
+        <div class="player-stats">
+          <div class="stat">
+            <span class="stat-label">Відстань до центру</span>
+            <span class="stat-value" id="distance2">—</span>
+          </div>
+        </div>
+        <div class="stone-indicator">
+          <img src="images/stone-yellow.jpg" alt="Yellow Stone" class="stone-img" id="stone2">
+        </div>
+      </section>
+    </div>
+
+    <!-- Game Controls -->
+    <div class="game-controls">
+      <div class="turn-indicator">
+        <span id="turnText">Хід: Гравець 1</span>
+        <div class="turn-dot" id="turnDot"></div>
+      </div>
+      
+      <div class="buttons-row">
+        <button class="btn-throw" id="btnThrow">
+          <span class="btn-icon">🥌</span>
+          <span class="btn-text">КИНУТИ</span>
+        </button>
+        
+        <button class="btn-sweep" id="btnSweep" disabled>
+          <span class="btn-text">Свіпнути</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Message (winner popup) -->
+    <div class="result-message hidden" id="resultMessage">
+      <div class="result-content">
+        <span class="result-icon" id="resultIcon">🏆</span>
+        <h2 class="result-title" id="resultTitle">Переможець!</h2>
+        <p class="result-text" id="resultText">Гравець 1 виграв!</p>
+      </div>
+    </div>
+
+    <!-- Throw Result Popup -->
+    <div class="throw-result hidden" id="throwResult">
+      <span class="throw-text" id="throwText">Влучив!</span>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

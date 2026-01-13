@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  height: 100vh;
+  color: #333;
+  /* Градієнт зеленого сукна */
+  background-image: linear-gradient(to top left, #2b8a3e 0%, #40c057 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Головний контейнер (стіл) */
+main {
+  position: relative;
+  width: 100rem;
+  height: 60rem;
+  background-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(200px); /* Ефект матового скла */
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.25);
+  border-radius: 9px;
+  overflow: hidden;
+  display: flex;
+}
+
+.player {
+  flex: 50%;
+  padding: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.75s;
+}
+
+/* Стилі для активного гравця (світліший фон) */
+.player--active {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.player--winner {
+  background-color: #2f9e44; /* Темно-зелений для переможця */
+}
+
+.player--winner .name {
+  font-weight: 700;
+  color: #c60606;
+}
+
+.name {
+  position: relative;
+  font-size: 4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  word-spacing: 2px;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.score {
+  font-size: 8rem;
+  font-weight: 700;
+  color: #c92a2a; /* Червоний колір очок */
+  margin-bottom: auto;
+}
+
+.current-label {
+  font-size: 1.7rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: #ddd;
+  background-color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 10rem;
+}
+
+/* Контейнер для карт гравця */
+.current-hand {
+  background-color: rgba(0, 0, 0, 0.1); /* Легка тінь зони */
+  border-radius: 9px;
+  padding: 1rem;
+  width: 80%;
+  min-height: 15rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: -30px; /* Карти трохи накладаються одна на одну */
+  flex-wrap: wrap;
+}
+
+/* Самі картинки карт, які ти додаватимеш через JS */
+.card {
+  width: 8rem;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  transition: transform 0.3s;
+}
+.card:hover {
+  transform: translateY(-10px); /* Ефект підняття карти при наведенні */
+}
+
+/* КНОПКИ */
+.btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #444;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 400;
+  transition: all 0.2s;
+  background-color: white;
+  padding: 0.7rem 2.5rem;
+  border-radius: 50rem;
+  box-shadow: 0 1.75rem 3.5rem rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background-color: #222;
+  color: #fff;
+}
+
+.btn--new {
+  top: 4rem;
+}
+.btn--roll {
+  top: 35rem;
+} /* Взяти карту */
+.btn--hold {
+  top: 41rem;
+} /* Досить */
+
+.btn:active {
+  transform: translate(-50%, 3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+/* Декоративна колода по центру */
+.deck-img {
+  position: absolute;
+  left: 50%;
+  top: 18rem;
+  transform: translateX(-50%);
+  width: 10rem;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.2);
+}
