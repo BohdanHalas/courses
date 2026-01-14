@@ -804,3 +804,58 @@ body {
 .btn-next-round:active {
   transform: scale(0.98);
 }
+/* Контейнер, який ставить кнопки в ряд */
+.modal-controls {
+  display: flex; /* Вмикаємо flex */
+  justify-content: center; /* Центруємо кнопки по горизонталі */
+  gap: 15px; /* Відступ між кнопками */
+  margin-top: 25px; /* Відступ від тексту переможця */
+}
+
+/* Спільні стилі для обох кнопок (на основі вашого коду) */
+.btn-continue,
+.btn-new-game {
+  display: block;
+  background: #e67e22;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* Ефекти для обох кнопок */
+.btn-continue:hover,
+.btn-new-game:hover {
+  background: #d35400;
+  transform: scale(1.05);
+}
+
+.btn-continue:active,
+.btn-new-game:active {
+  transform: scale(0.98);
+}
+
+/* Якщо хочете, щоб кнопка "Продовжити" була іншого кольору (наприклад, синього) */
+.btn-continue {
+  background: #3498db;
+}
+.btn-continue:hover {
+  background: #2980b9;
+}
+
+.no-animation {
+  animation: none !important;
+}
+
+.stone-on-house {
+  position: absolute;
+  top: 50%; /* Центр мішені по вертикалі */
+  left: 50%; /* Центр мішені по горизонталі */
+  /* -50% центрує сам камінь, а +0px — це його початковий зсув */
+  transform: translate(-50%, calc(-50% + 0px));
+  transition: transform 1s ease-out; /* Робить рух плавним, а не миттєвим */
+}
