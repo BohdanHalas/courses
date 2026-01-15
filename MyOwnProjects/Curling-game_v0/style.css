@@ -372,9 +372,9 @@ body {
   border-radius: var(--radius-full);
   border: 3px solid white;
   box-shadow: var(--shadow-md), var(--shadow-glow-red);
-  transition: transform 0.4s ease-out;
+  transition: transform 0.4s ease-out, bottom 0.4s ease-out; /* Додано bottom для гнучкості */
   position: absolute;
-  bottom: 0;
+  bottom: 0; /* Щоб вони стояли рівно по центру контейнера */
 }
 
 .moving-stone.player2 {

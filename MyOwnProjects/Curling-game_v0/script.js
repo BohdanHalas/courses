@@ -8,7 +8,9 @@ let distanceToCenter,
   stoneState,
   r1,
   r2,
-  winner;
+  winner,
+  moveUp1,
+  moveUp2;
 
 //connect values
 const distance1 = document.getElementById(`distance1`);
@@ -24,23 +26,27 @@ const roundScore1 = document.getElementById(`roundScore1`);
 const roundScore2 = document.getElementById(`roundScore2`);
 const resultMessage = document.getElementById(`resultMessage`);
 const btnContinue = document.querySelector(`.btn-continue`);
-const stoneStyle = document.querySelector(`.moving-stone`).style;
 const indicatorStyle = document.getElementById(`turnDot`).style;
 const indicatorAnimation = document.querySelector(`.turn-dot`);
 const stone1 = document.querySelector('.player-1');
 const stone2 = document.querySelector('.player-2');
-let moveUp = 0;
+const stoneOne = document.getElementById('movingStone1');
+const stoneTwo = document.getElementById('movingStone2');
 
 //init functions
-const init = function () {
-  distanceToCenter = 150;
+const nextRound = function () {
+  distanceToCenter = 260;
   throwDistance = 0;
   sweepDistance = 0;
+  currentPlayer = 2;
+  moveUp2 = 0;
+  moveStone(0);
   currentPlayer = 1;
+  moveUp1 = 0;
+  moveStone(0);
   stoneState = `start`;
   r1 = 0;
   r2 = 0;
-  winner = [0, 0];
   roundScore1.textContent = winner[0];
   roundScore2.textContent = winner[1];
   distance1.textContent = distanceToCenter + ` м`;
@@ -51,19 +57,26 @@ const init = function () {
   btnEndTurn.disabled = false;
   roundResult.classList.add(`hidden`);
   resultMessage.classList.add(`hidden`);
-  stoneStyle.backgroundColor = `red`;
   indicatorStyle.backgroundColor = `red`;
   indicatorAnimation.classList.remove(`no-animation`);
   stone1.classList.add('active');
   stone2.classList.remove('active');
   document.getElementById(`turnDot`).classList.remove('hidden');
+  stoneTwo.classList.add(`hidden`);
+};
+
+const init = function () {
+  winner = [0, 0];
+  nextRound();
 };
 
 const fThrow = function () {
   if (stoneState === `start`) {
-    throwDistance = Math.trunc(Math.random() * 90) + 10;
+    stoneTwo.classList.remove(`hidden`);
+    throwDistance = Math.trunc(Math.random() * 50) + 100; //TODO
     // console.log(throwDistance);
     distanceToCenter -= throwDistance;
+    moveStone(throwDistance);
     document.getElementById(`distance${currentPlayer}`).textContent =
       distanceToCenter + ` м`;
     stoneState = `ingame`;
@@ -76,10 +89,10 @@ const fThrow = function () {
 
 const fSweep = function () {
   if (stoneState === `ingame`) {
-    sweepDistance = Math.trunc(Math.random() * 10) + 5;
+    sweepDistance = Math.trunc(Math.random() * 20);
     // console.log(throwDistance);
     distanceToCenter -= sweepDistance;
-    // moveStone(distanceToCenter); TODO
+    moveStone(sweepDistance);
     document.getElementById(`distance${currentPlayer}`).textContent =
       distanceToCenter + ` м`;
     if ((distanceToCenter <= 0) & (currentPlayer === 1)) {
@@ -110,11 +123,12 @@ const fEndTurn = function () {
 };
 const fSwapSide = function () {
   currentPlayer = 2;
+  moveUp2 = 0;
+  moveStone(0);
   stone1.classList.remove('active');
   stone2.classList.add('active');
-  stoneStyle.backgroundColor = `yellow`;
   indicatorStyle.backgroundColor = `yellow`;
-  distanceToCenter = 150;
+  distanceToCenter = 260;
   btnSweep.disabled = true;
   btnThrow.disabled = false;
   stoneState = `start`;
@@ -143,31 +157,6 @@ const endRound = function () {
   fEndGame();
 };
 
-const nextRound = function () {
-  distanceToCenter = 150;
-  throwDistance = 0;
-  sweepDistance = 0;
-  currentPlayer = 1;
-  stoneState = `start`;
-  r1 = 0;
-  r2 = 0;
-  roundScore1.textContent = winner[0];
-  roundScore2.textContent = winner[1];
-  distance1.textContent = distanceToCenter + ` м`;
-  distance2.textContent = distanceToCenter + ` м`;
-  playerName.textContent = `Хід: Гравець ${currentPlayer}`;
-  btnThrow.disabled = false;
-  btnSweep.disabled = true;
-  btnEndTurn.disabled = false;
-  roundResult.classList.add(`hidden`);
-  resultMessage.classList.add(`hidden`);
-  stoneStyle.backgroundColor = `red`;
-  indicatorStyle.backgroundColor = `red`;
-  indicatorAnimation.classList.remove(`no-animation`);
-  stone1.classList.add('active');
-  stone2.classList.remove('active');
-};
-
 const fEndGame = function () {
   if (winner.includes(3)) {
     console.log(winner.indexOf(3));
@@ -180,13 +169,17 @@ const fEndGame = function () {
     } - переможець!`;
   }
 };
-// TODO
-// function moveStone() {
-//   const stone = document.querySelector('.moving-stone');
-//   const maxRange = 260;
-//   moveUp += maxRange / sweepDistance;
-//   stone.style.transform = `translateY(-${moveUp}px)`;
-// }
+
+function moveStone(sweepD) {
+  const pixelForMeter = 260 / 260; // 260 відстань в пікселях від старту до центру. 260 метрів в грі
+  if (currentPlayer === 1) {
+    moveUp1 += Math.round(pixelForMeter * sweepD);
+    stoneOne.style.transform = `translateY(-${moveUp1}px)`;
+  } else {
+    moveUp2 += Math.round(pixelForMeter * sweepD);
+    stoneTwo.style.transform = `translateY(-${moveUp2}px)`;
+  }
+}
 // Init + New Game
 init();
 for (let i = 0; i <= 1; i++) {
@@ -213,6 +206,5 @@ btnContinue.addEventListener('click', function () {
   roundResult.classList.add(`hidden`);
   playerName.textContent =
     'Гра закінчена! Натисніть "Нова гра" - щоб зіграти заново!';
-  stoneStyle.backgroundColor = `green`;
   document.getElementById(`turnDot`).classList.add('hidden');
 });
