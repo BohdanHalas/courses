@@ -35,7 +35,7 @@ calcAge(1991);
 
 // console.log(age);
 // printAge();
-*/
+
 
 /////////// 👀👀👀Hoisting👀👀👀
 //Variables
@@ -88,3 +88,54 @@ const z = 3;
 console.log(x === window.x);
 console.log(y === window.y);
 console.log(z === window.z);
+*/
+
+// console.log(this);
+
+const calcAge = function (birthYear) {
+  console.log(2026 - birthYear);
+  // console.log(this);
+};
+
+calcAge(1999);
+
+const calcAgeArrow = birthYear => {
+  console.log(2026 - birthYear);
+  // console.log(this);
+};
+
+calcAgeArrow(1991);
+
+const bohdan = {
+  year: 1999,
+  calcAge: function () {
+    console.log(this);
+    console.log(2026 - this.year);
+  },
+};
+
+bohdan.calcAge();
+
+const nelia = {
+  year: 2017,
+};
+
+nelia.calcAge = bohdan.calcAge;
+
+nelia.calcAge();
+
+const f = bohdan.calcAge;
+
+// f();
+
+const testBohdan = {
+  year: 1999,
+  f1: function () {
+    const f2 = function () {
+      console.log(this.year);
+    };
+    f2();
+  },
+};
+
+testBohdan.f1();
