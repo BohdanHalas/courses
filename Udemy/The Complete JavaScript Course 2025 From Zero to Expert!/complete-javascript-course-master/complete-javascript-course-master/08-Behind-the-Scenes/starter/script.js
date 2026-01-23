@@ -88,7 +88,7 @@ const z = 3;
 console.log(x === window.x);
 console.log(y === window.y);
 console.log(z === window.z);
-*/
+
 
 // console.log(this);
 
@@ -139,3 +139,51 @@ const testBohdan = {
 };
 
 testBohdan.f1();
+*/
+
+var firstName = `Nelia`;
+const bohdan = {
+  firstName: `Bohdan`,
+  year: 1999,
+  calcAge: function () {
+    // Solution 1
+    // console.log(this);
+    console.log(2026 - this.year);
+    const self = this; // self or that
+    const isMellenial = function () {
+      // console.log(this);
+      console.log(self);
+      // console.log(this.year >= 1981 && this.year <= 1996);
+      console.log(self.year >= 1981 && self.year <= 1996);
+    };
+    // Solution 2
+    const isMellenial2 = () => {
+      console.log(this);
+      console.log(this.year >= 1981 && this.year <= 1996);
+    };
+    isMellenial();
+    isMellenial2();
+  },
+
+  greet: function () {
+    console.log(this);
+    console.log(`Hey ${this.firstName}`);
+  },
+};
+
+bohdan.greet();
+bohdan.calcAge();
+
+const addExpr = function (a, b) {
+  console.log(arguments);
+  return a + b;
+};
+
+addExpr(2, 5);
+addExpr(2, 5, 8, 12);
+
+const addArrow = (a, b) => {
+  console.log(arguments);
+  return a + b;
+};
+addArrow(2, 5, 7, 10);
