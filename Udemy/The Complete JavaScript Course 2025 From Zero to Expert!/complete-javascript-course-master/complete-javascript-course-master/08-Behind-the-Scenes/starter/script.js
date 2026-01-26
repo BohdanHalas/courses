@@ -139,7 +139,7 @@ const testBohdan = {
 };
 
 testBohdan.f1();
-*/
+
 
 var firstName = `Nelia`;
 const bohdan = {
@@ -187,3 +187,53 @@ const addArrow = (a, b) => {
   return a + b;
 };
 addArrow(2, 5, 7, 10);
+*/
+
+const nelia1 = {
+  firstName: `Nelia`,
+  lastName: `Tsokurova`,
+  age: 26,
+};
+
+function marryPerson(originalPerson, newLastName) {
+  originalPerson.lastName = newLastName;
+  return originalPerson;
+}
+
+const marriedNelia = marryPerson(nelia1, `Halas`);
+
+// const marriedNelia = nelia;
+// marriedNelia.lastName = `Halas`;
+
+console.log(`Before: `, nelia1);
+console.log(`After: `, marriedNelia);
+
+// nelia = { x: 23 };
+
+// nelia1.age = 30;
+
+const nelia = {
+  firstName: `Nelia`,
+  lastName: `Tsokurova`,
+  age: 26,
+  family: [`Alena`, `Polina`],
+};
+
+//Shallow copy
+// const neliaCopy = { ...nelia };
+// neliaCopy.lastName = `Halas`;
+
+// neliaCopy.family.push(`Natalia`);
+// neliaCopy.family.push(`Yuumi`);
+// console.log(nelia);
+// console.log(neliaCopy);
+
+//Deep copy/clone
+
+const neliaClone = structuredClone(nelia);
+neliaClone.lastName = `Halas`;
+
+neliaClone.family.push(`Natalia`);
+neliaClone.family.push(`Yuumi`);
+console.log(`Original: `, nelia);
+console.log(`Clone: `, neliaClone);
