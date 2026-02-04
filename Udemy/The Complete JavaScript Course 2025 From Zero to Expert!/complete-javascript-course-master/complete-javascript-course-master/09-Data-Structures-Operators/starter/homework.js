@@ -304,3 +304,28 @@ function printBookAuthorsCount(title, ...authors) {
   console.log(`The book ${title} has ${authors.length} authors`);
 }
 printBookAuthorsCount('Algorithms', 'Robert Sedgewick', 'Kevin Wayne');
+
+function hasExamplesInJava(bookObj) {
+  console.log(bookObj.programmingLanguage === `Java` || `no data available`);
+}
+hasExamplesInJava(books[0]);
+
+for (let i = 0; i < books.length; i++) {
+  books[i].onlineContent && console.log(`${books[i].title} has online content`);
+}
+
+for (let i = 0; i < books.length; i++) {
+  const { title, onlineContent } = books[i];
+  onlineContent ??
+    console.log(`"${title}" provides no data about its online content`);
+}
+
+for (let i = 0; i < books.length; i++) {
+  books[i].edition ??= 1;
+  console.log(books[i].edition);
+}
+console.log(`-----------`);
+for (let i = 0; i < books.length; i++) {
+  books[i].highlighted &&= books[i].thirdParty.goodreads.rating >= 4.2;
+  console.log(books[i].highlighted);
+}
