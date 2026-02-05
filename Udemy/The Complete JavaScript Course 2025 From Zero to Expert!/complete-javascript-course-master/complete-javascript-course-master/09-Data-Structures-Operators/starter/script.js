@@ -21,7 +21,22 @@ const mexicanFoods = new Set([
   'avocado',
   'garlic',
 ]);
+const weekDays = [`mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun`];
 
+const openingHours = {
+  [weekDays[3]]: {
+    open: 12,
+    close: 22,
+  },
+  [weekDays[4]]: {
+    open: 11,
+    close: 23,
+  },
+  [`day-${2 + 4}`]: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
 // Data needed for first part of the section
 const restaurant = {
   name: 'Classico Italiano',
@@ -30,35 +45,20 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
-  order: function (starterIndex, mainIndex) {
+  order(starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
 
-  orderDelivery: function ({
-    starterIndex = 1,
-    mainIndex = 0,
-    time = `20:00`,
-    address,
-  }) {
+  orderDelivery({ starterIndex = 1, mainIndex = 0, time = `20:00`, address }) {
     console.log(
       `Order received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`,
     );
   },
-  orderPasta: function (ing1, ing2, ing3) {
+
+  // ES6 enhanced object literals
+  openingHours,
+
+  orderPasta(ing1, ing2, ing3) {
     console.log(`Here is your declicious pasta with ${ing1}, ${ing2}, ${ing3}`);
   },
   orderPizza: function (main, ...otherIngredients) {
@@ -66,6 +66,18 @@ const restaurant = {
     console.log(otherIngredients);
   },
 };
+
+/*
+const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+
+for (const item of menu) console.log(item);
+
+for (const [i, el] of menu.entries()) {
+  console.log(`${i + 1} is ${el}`);
+}
+
+console.log([...menu.entries()]);
+
 
 const rest1 = {
   name: `Capri`,
@@ -97,7 +109,7 @@ rest2.owner &&= `<Anonymous>`;
 console.log(rest1);
 console.log(rest2);
 
-/*
+
 // restaurant.numGuests = 0;
 
 const guests = restaurant.numGuests || 10;
@@ -307,4 +319,106 @@ console.log(i, j, k);
 // Default values
 const [p = 1, q = 1, r = 1] = [8, 9];
 console.log(p, q, r);
+
+
+//////////////////////////
+//CHALLENGE 1 
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.43,
+    x: 1.43,
+    team2: 1.53,
+  },
+};
+//1
+const [players1, players2] = game.players;
+// console.log(players1);
+// console.log(players2);
+
+//2
+const [gk, ...fieldPlayers] = players1;
+// console.log(gk, fieldPlayers);
+
+//3
+const allPlayers = [...players1, ...players2];
+// console.log(allPlayers);
+
+//4
+const playersFinal = [...players1, `Thiago`, `Coutinho`, `Perisic`];
+// console.log(playersFinal);
+
+//5
+const {
+  odds: { team1, x: draw, team2 },
+} = game;
+// console.log(team1, draw, team2);
+
+//6
+function printGoals(...strikers) {
+  for (let i = 0; i < strikers.length; i++) {
+    console.log(`Goal #${i + 1} scored ${strikers[i]}`);
+  }
+}
+printGoals(`Lewa`, `Kimmich`, `Alaba`, `Muller`);
+printGoals(...game.scored);
+
+//7
+team1 === team2 &&
+  team1 === draw &&
+  console.log(`${game.team1}, ${game.team2} and a Draw have same chances`);
+
+team1 === team2 &&
+  team1 < draw &&
+  console.log(`${game.team1} and ${game.team2} have same chances`);
+
+team1 === draw &&
+  team1 < team2 &&
+  console.log(`${game.team1} and a Draw have same chances`);
+
+team2 === draw &&
+  team2 < team1 &&
+  console.log(`${game.team2} and a Draw have same chances`);
+
+team1 < team2 &&
+  team1 < draw &&
+  console.log(`${game.team1} is more likely to win`);
+
+team2 < team1 &&
+  team2 < draw &&
+  console.log(`${game.team2} is more likely to win`);
+
+draw < team1 && draw < team2 && console.log(`Looks like a draw`);
 */
