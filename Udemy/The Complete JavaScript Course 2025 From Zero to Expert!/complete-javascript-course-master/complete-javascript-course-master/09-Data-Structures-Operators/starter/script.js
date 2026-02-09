@@ -32,7 +32,7 @@ const openingHours = {
     open: 11,
     close: 23,
   },
-  [`day-${2 + 4}`]: {
+  sat: {
     open: 0, // Open 24 hours
     close: 24,
   },
@@ -66,8 +66,65 @@ const restaurant = {
     console.log(otherIngredients);
   },
 };
-
 /*
+// Property NAMES
+const properties = Object.keys(openingHours);
+
+console.log(properties);
+
+let openStr = `We are open on ${properties.length} days:`;
+for (const day of properties) {
+  openStr += ` ${day}`;
+}
+console.log(openStr);
+
+// Property VALUES
+
+const values = Object.values(openingHours);
+
+console.log(`Values: `, values);
+
+// Entire object
+const entries = Object.entries(openingHours);
+console.log(entries);
+
+for (const x of entries) {
+  console.log(`On ${x[0]} we open at ${x[1].open} and close at ${x[1].close}`);
+}
+console.log(`_________------------________`);
+
+for (const [day, { open, close }] of entries) {
+  console.log(`On ${day} we open at ${open} and close at ${close}`);
+}
+
+if (restaurant.openingHours && restaurant.openingHours.mon)
+  console.log(restaurant.openingHours.mon.open);
+
+// console.log(restaurant.openingHours.mon.open);
+
+//WITH optional chaining
+console.log(restaurant.openingHours.mon?.open);
+console.log(restaurant.openingHours?.mon?.open);
+
+const days = [`mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun`];
+
+for (const day of days) {
+  const open = restaurant.openingHours[day]?.open ?? `closed`;
+  console.log(`On day ${day}, we open at ${open}`);
+}
+
+// Methods
+console.log(restaurant.order?.(0, 1) ?? `Method doesn't exist`);
+console.log(restaurant.orderRisotto?.(0, 1) ?? `Method doesn't exist`);
+
+// Arrays
+const users = [{ name: `Bohdan`, email: `mail@gmail.com` }];
+const clients = [];
+
+console.log(users[0]?.name ?? `user array - empty!`);
+console.log(clients[0]?.name ?? `user array - empty!`);
+
+
 const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
 
 for (const item of menu) console.log(item);
@@ -422,3 +479,102 @@ team2 < team1 &&
 
 draw < team1 && draw < team2 && console.log(`Looks like a draw`);
 */
+/////////////////////////////////////////
+// Challenge #2
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
+
+// 1.
+for (const [i, striker] of game.scored.entries()) {
+  console.log(`Goal ${i + 1}: scored ${striker}`);
+}
+// 2.
+let sum = 0;
+const odds = Object.values(game.odds);
+for (const odd of odds) {
+  sum += odd;
+}
+console.log(sum / odds.length);
+
+// 3.
+for (const [, [key, odd]] of Object.entries(game.odds).entries()) {
+  console.log(
+    `Odd of ${game?.[key] ? `victory ${game[key]}` : `draw`}: ${odd}`,
+  );
+}
+
+// Bonus.
+// const scorers = {};
+// const abc = [1, 2, { a: 3 }, [4, 5]];
+// function updateObj(obj, ...data) {
+//   console.log(data);
+// }
+// updateObj(scorers, ...abc);
+
+// const allPlayers = [...game.players[0], ...game.players[1]];
+// console.log(allPlayers);
+
+// Моє РІШЕННЯ
+
+const strikers = [[], []];
+for (const [i, striker] of game.scored.entries()) {
+  strikers[0].includes(striker) && strikers[1][strikers[0].indexOf(striker)]++;
+  if (!strikers[0].includes(striker)) {
+    strikers[0].push(striker);
+    strikers[1].push(1);
+  }
+}
+const scorers = {};
+// for (let i = 0; i<strikers[0].length, i++)
+
+for (const [i, goleador] of strikers[0].entries()) {
+  scorers[goleador] = strikers[1][i];
+}
+console.log(scorers);
+
+const scorersGemini = {};
+
+for (const player of game.scored) {
+  // Якщо гравець уже є в об'єкті — додаємо 1, якщо немає — встановлюємо 0 і додаємо 1
+  scorersGemini[player] = (scorersGemini[player] || 0) + 1;
+}
+
+console.log(scorersGemini);
