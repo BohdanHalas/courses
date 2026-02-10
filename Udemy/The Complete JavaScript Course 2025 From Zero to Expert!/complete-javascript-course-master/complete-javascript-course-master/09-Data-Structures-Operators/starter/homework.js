@@ -393,3 +393,21 @@ console.log(entries);
 
 const entries2 = Object.entries(books[0].thirdParty.goodreads);
 console.log(entries2);
+
+const allKeywords = [];
+const setKeywords = new Set();
+for (const { keywords } of books) {
+  allKeywords.push(...keywords);
+  for (const word of keywords) setKeywords.add(word);
+}
+console.log(allKeywords);
+console.log(setKeywords);
+const uniqueKeywords = new Set(allKeywords);
+uniqueKeywords.add(`coding`);
+uniqueKeywords.add(`science`);
+uniqueKeywords.delete(`business`);
+
+const uniqueKeywordsArr = [...uniqueKeywords];
+uniqueKeywords.clear();
+console.log(uniqueKeywords);
+// allKeywords.push(...setKeywords);
