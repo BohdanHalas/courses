@@ -411,3 +411,23 @@ const uniqueKeywordsArr = [...uniqueKeywords];
 uniqueKeywords.clear();
 console.log(uniqueKeywords);
 // allKeywords.push(...setKeywords);
+
+const bookMap = new Map([
+  ['title', 'Clean Code'],
+  ['author', 'Robert C. Martin'],
+]);
+bookMap.set(`pages`, 464);
+console.log(`${bookMap.get(`title`)} by ${bookMap.get(`author`)}`);
+console.log(bookMap.size);
+
+bookMap.has(`author`) && console.log(`The author of the book is known`);
+
+console.log(bookMap);
+const firstBookMap = new Map(Object.entries(books[0]));
+for (const [key, value] of firstBookMap) {
+  typeof value === `number` && console.log(key);
+}
+
+for (const [key, value] of firstBookMap) {
+  if (typeof value === 'number') console.log(key);
+}
