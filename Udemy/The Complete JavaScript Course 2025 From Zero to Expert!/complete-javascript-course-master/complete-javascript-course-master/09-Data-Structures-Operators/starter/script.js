@@ -49,73 +49,6 @@ const restaurant = {
     console.log(otherIngredients);
   },
 };
-/*
-// Iteration with Maps
-
-const question = new Map([
-  [`question`, `What is the best programming language in the world?`],
-  [1, `C`],
-  [2, `Java`],
-  [3, `JS`],
-  [`correct`, 3],
-  [true, `Correct!`],
-  [false, `Try again!`],
-]);
-console.log(question);
-
-//Converting objects to maps:
-console.log(Object.entries(openingHours));
-const hoursMap = new Map(Object.entries(openingHours));
-console.log(hoursMap);
-
-// quiz app
-console.log(question.get(`question`));
-for (const [key, value] of question) {
-  if (typeof key === `number`) console.log(`Answer ${key}. ${value}`);
-}
-// let answer = Number(prompt(`Write the correct number of answer`));
-const answer = 3;
-while (!(answer === question.get(`correct`))) {
-  answer = Number(
-    prompt(`${question.get(answer === question.get(`correct`))}`),
-  );
-  console.log(question.get(answer === question.get(`correct`)));
-}
-// Convert Map to array
-console.log([...question]);
-// console.log(question.entries());
-console.log([...question.keys()]);
-console.log([...question.values()]);
-
-
-// MAPS 
-
-const rest = new Map();
-rest.set(`name`, `Classico Italiano`);
-rest.set(1, `Firenze, Italy`);
-console.log(rest.set(2, `Lisbon, Portugal`));
-rest
-  .set(`Categories`, ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
-  .set(`open`, 11)
-  .set(`close`, 23)
-  .set(true, `We are open :D`)
-  .set(false, `We are closed`);
-console.log(rest.get(`name`));
-console.log(rest.get(true));
-console.log(rest.get(1));
-
-const time = 21;
-console.log(rest.get(rest.get(`close`) > time && rest.get(`open`) < time));
-console.log(rest.has(`Categories`));
-rest.delete(2);
-// rest.clear();
-const arr = [1, 2];
-rest.set(arr, `test`);
-rest.set(document.querySelector(`h1`), `Heading`);
-console.log(rest.get(arr));
-console.log(rest);
-console.log(rest.size);
-
 
 // New Operations to make SETS useful!
 const italianFoods = new Set([
@@ -155,6 +88,7 @@ console.log(
   `Symmetric Difference (Симетрична різниця об'єднаних множин. Або ж всі значення без перетину):`,
   uniqueItalianAndMexican,
 );
+
 // const uniqueMexicanFood = mexicanFoods.difference(italianFoods);
 // console.log(uniqueMexicanFood);
 
