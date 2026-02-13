@@ -116,7 +116,6 @@ console.log(rest.get(arr));
 console.log(rest);
 console.log(rest.size);
 
-
 // New Operations to make SETS useful!
 const italianFoods = new Set([
   'pasta',
@@ -155,6 +154,7 @@ console.log(
   `Symmetric Difference (Симетрична різниця об'єднаних множин. Або ж всі значення без перетину):`,
   uniqueItalianAndMexican,
 );
+
 // const uniqueMexicanFood = mexicanFoods.difference(italianFoods);
 // console.log(uniqueMexicanFood);
 
