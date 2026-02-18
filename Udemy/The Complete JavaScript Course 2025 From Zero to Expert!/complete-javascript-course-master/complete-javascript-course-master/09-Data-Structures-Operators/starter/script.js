@@ -49,7 +49,7 @@ const restaurant = {
     console.log(otherIngredients);
   },
 };
-
+/*
 const airline = `TAP Air Portugal`;
 const plane = `A320`;
 
@@ -206,7 +206,7 @@ const planesInLine = function (n) {
 planesInLine(3);
 planesInLine(5);
 planesInLine(12);
-/*
+
 // Iteration with Maps
 //////////// ahahahahahhahah
 const question = new Map([
@@ -898,4 +898,42 @@ for (const [minute, event] of gameEvents) {
   const half = minute <= 45 ? `FIRST HALF` : `SECOND HALF`;
   console.log(`[${half}] ${minute}: ${event}`);
 }
+ TEST DATA
+underscore_case
+ first_name
+Some_Variable
+ calculate_AGE
+delayed_departure
+
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+
+const readText = function () {
+  const textFresh = document.querySelector(`textarea`).value;
+  const freshTextArr = textFresh.split(`\n`);
+
+  transforfText(freshTextArr);
+};
+
+const transforfText = function (textArr) {
+  const newTextArr = [];
+  let finalArr = [];
+  for (const [n, value] of textArr.entries()) {
+    newTextArr.push(value.trim().toLowerCase().split(`_`));
+    newTextArr[n][0] = newTextArr[n][0].slice(0);
+    newTextArr[n][1] =
+      newTextArr[n][1][0].toUpperCase() + newTextArr[n][1].slice(1);
+    newTextArr[n][0] = newTextArr[n].join(``);
+    newTextArr[n].pop();
+    finalArr = [...finalArr, ...newTextArr[n]];
+  }
+  showNewText(finalArr);
+};
+const showNewText = function (arr) {
+  for (const [i, word] of arr.entries()) {
+    console.log(word.padEnd(30, ` `).padEnd(30 + i + 1, `✅`));
+  }
+};
+
+document.querySelector(`button`).addEventListener(`click`, readText);
 */
