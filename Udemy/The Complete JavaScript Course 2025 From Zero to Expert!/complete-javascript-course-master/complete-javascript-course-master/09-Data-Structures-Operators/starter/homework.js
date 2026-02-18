@@ -431,3 +431,121 @@ for (const [key, value] of firstBookMap) {
 for (const [key, value] of firstBookMap) {
   if (typeof value === 'number') console.log(key);
 }
+const showISBN = function (...numbers) {
+  console.log(numbers);
+  for (const i of numbers) {
+    console.log(books[0].ISBN[i]);
+  }
+};
+showISBN(...[6, 4, 9, 8]);
+
+const quote =
+  'A computer once beat me at chess, but it was no match for me at kick boxing';
+
+console.log(quote.indexOf(`chess`));
+
+console.log(
+  quote.slice(
+    quote.indexOf(`boxing`),
+    quote.indexOf(`boxing`) + `boxing`.length,
+  ),
+);
+
+const isContributor = function (author) {
+  return author.includes(`Contributor`);
+};
+console.log(isContributor('Julie Sussman (Contributor)'));
+console.log(isContributor('Julie Sussman'));
+
+const normalizeAuthorName = function (start) {
+  let final = start.trim().toLowerCase();
+  console.log(final);
+  const trash = `(contributor)`;
+  const index = final.indexOf(trash);
+  console.log(index);
+  final =
+    index !== -1
+      ? final.slice(0, index - 1) + final.slice(index + trash.length)
+      : final;
+  final = final.split(` `);
+
+  const finalName = [];
+  for (const part of final) {
+    finalName.push(part[0].toUpperCase() + part.slice(1));
+  }
+
+  return finalName.join(` `);
+};
+
+normalizeAuthorName('  JuliE sussMan (Contributor)');
+console.log(normalizeAuthorName('  JuliE sussMan (Contributor)'));
+console.log(normalizeAuthorName(`ЗАЙкаван (Contributor) авіХХаа АААвіф`));
+
+const newBookTitle = books[1].title.replace(`Programs`, `Software`);
+console.log(newBookTitle);
+
+const logBookTheme = function (title) {
+  let info = [];
+
+  if (title.toLowerCase().startsWith(`computer`))
+    info.push(`This book is about computers`);
+
+  if (
+    title.toLowerCase().includes(`algorithms`) &&
+    title.toLowerCase().includes(`structures`)
+  )
+    info.push(`This book is about algorithms and data structures`);
+
+  if (
+    !title.toLowerCase().includes(`operating`) &&
+    (title.toLowerCase().endsWith(`system`) ||
+      title.toLowerCase().endsWith(`systems`))
+  )
+    info.push(
+      `This book is about some systems, but definitely not about operating systems`,
+    );
+
+  if (info[0]) console.log(info.join(`. `) + `.`);
+  else console.log(`Book about ROBOT! `);
+};
+
+logBookTheme(`Computers, algorithms and structures system`);
+
+const logBookCategories = string => {
+  for (const cate of string.split(`;`)) {
+    console.log(cate);
+  }
+};
+const bookCategories =
+  'science;computing;computer science;algorithms;business;operating systems;networking;electronics';
+logBookCategories(bookCategories);
+
+const getKeywordsAsString = function (bookObj) {
+  const answer = new Set();
+  for (const { keywords } of bookObj) {
+    for (const el of keywords) {
+      answer.add(el);
+    }
+  }
+  const keyWords = [...answer];
+  console.log(keyWords.join(`;`));
+};
+
+getKeywordsAsString(books);
+
+const bookChapters = [
+  ['The Basics', 14],
+  ['Sorting', 254],
+  ['Searching', 372],
+  ['Graphs', 526],
+  ['Strings', 706],
+];
+
+const logBookChapters = function (bookChapters) {
+  const MAX = 30;
+  for (const [name, pages] of bookChapters) {
+    console.log(name.padEnd(MAX, `_`) + ` ${pages}`);
+  }
+};
+
+logBookChapters(bookChapters);
