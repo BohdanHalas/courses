@@ -205,4 +205,51 @@ const addTaxRate = function (rate) {
 const otherAddVAT = addTaxRate(0.23);
 console.log(otherAddVAT(100));
 // console.log(otherAddVAT(23));
+
+// Challenge #1
+
+const poll = {
+  question: 'What is your favourite programming language?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+  // This generates [0, 0, 0, 0]. More in the next section 😃
+  answers: new Array(4).fill(0),
+  registerNewAnswer() {
+    let answer = ``;
+    const resultFromPrompt = prompt(
+      `${this.question}\n ${this.options.join(`\n `)} \n Write the correct number `,
+    );
+    answer = resultFromPrompt;
+    console.log(answer);
+    answer = answer.toLowerCase();
+    answer = answer.replaceAll(` `, ``);
+    if (answer.includes(`0`) || answer.includes(`javascript`)) answer = 0;
+    else if (answer.includes(`1`) || answer.includes(`python`)) answer = 1;
+    else if (answer.includes(`2`) || answer.includes(`rust`)) answer = 2;
+    else if (answer.includes(`3`) || answer.includes(`c++`)) answer = 3;
+    else answer = undefined;
+    answer === undefined ? `` : this.answers[answer]++;
+    this.displayResults(this.answers);
+  },
+  displayResults(type) {
+    if (typeof type === `string`) console.log(`Poll results are ${type}`);
+    else console.log(type);
+  },
+  // displayBonusResults(...type) {
+  //   console.log(type.split(`,`));
+  //   if (typeof dataTest === `string`) {
+  //     let result = 'Poll results are';
+  //     for (const data of type.split(`,`)) {
+  //       result.join(` `, data);
+  //     }
+  //     console.log(result);
+  //   } else console.log(type);
+  // },
+};
+document
+  .querySelector(`.poll`)
+  .addEventListener(`click`, poll.registerNewAnswer.bind(poll));
+console.log(poll.answers);
+
+const dataTest = `1,2,3,4,5`;
+// poll.displayBonusResults(dataTest);
 */
