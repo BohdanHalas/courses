@@ -252,4 +252,102 @@ console.log(poll.answers);
 
 const dataTest = `1,2,3,4,5`;
 // poll.displayBonusResults(dataTest);
+
+
+const runOnce = function () {
+  console.log(`This will never run again`);
+};
+runOnce();
+
+// IIFE
+(function () {
+  console.log(`This will never run again`);
+  const isPrivate = 23;
+})();
+
+// console.log(isPrivate);
+
+(() => console.log(`This will never run again`))();
+
+{
+  const isPrivate = 23;
+  var notPrivate = 23;
+}
+
+// console.log(isPrivate);
+console.log(notPrivate);
+
+
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker();
+console.dir(booker);
+
+
+// Example 1
+let f;
+
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f();
+// console.dir(f);
+
+// Re-assigned f function
+h();
+f();
+
+// console.dir(f);
+
+// Example 2
+
+const boardPassengers = function (numberOfPassengers, waitTime) {
+  const perGroup = numberOfPassengers / 3;
+
+  setTimeout(function () {
+    console.log(`We are now boarding all ${numberOfPassengers} passengers`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
+  }, waitTime * 1000);
+
+  console.log(`Will start boarding in ${waitTime} seconds`);
+};
+const perGroup = 1000;
+boardPassengers(180, 3);
+
+
+// Challenge #2
+
+(function () {
+  const header = document.querySelector(`h1`);
+  header.style.color = `red`;
+  document.querySelector(`body`).addEventListener(`click`, function () {
+    header.style.color = `blue`;
+  });
+})();
+
+// document.querySelector(`h1`).addEventListener(`click`, function () {
+//   document.querySelector(`h1`).style.color = `red`;
+// });
 */
