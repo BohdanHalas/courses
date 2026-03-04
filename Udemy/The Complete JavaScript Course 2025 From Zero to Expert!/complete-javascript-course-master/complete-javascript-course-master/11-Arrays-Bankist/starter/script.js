@@ -168,8 +168,39 @@ currenciesUnique.forEach(function (value, _, set) {
   console.log(`${value}`);
 });
 
-// Challenge #1
+let EURToUSD = 1.1;
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
+// const movementsInUSD = movements.map(function (movement, i, arr) {
+//   return movement * EURToUSD;
+// });
+const movementsInUSD = movements.map(movement => movement * EURToUSD);
+console.log(movements);
+console.log(movementsInUSD);
+
+const movementsUSDfor = [];
+for (const mov of movements) {
+  movementsUSDfor.push(mov * EURToUSD);
+}
+console.log(movementsUSDfor);
+
+const movementsDescriptions = movements.map((movement, index) => {
+  const str = movement > 0 ? `deposited` : `withdrew`;
+  return `Movement ${index + 1}: You ${str} ${Math.abs(movement)}`;
+});
+console.log(movementsDescriptions);
+
+const testArr = [1, 2, -3, 4, -5, -6];
+
+const nestLvlTestArr = testArr.map(value => {
+  if (value > 0) return `ok`;
+});
+console.log(nestLvlTestArr);
+*/
+
+// ------------------------------------------------------------------
+// Challenge #1
+/*
 const checkDogs = function (dogsJulia, dogsKate) {
   const adultOrPuppy = function (age, i) {
     age >= 3
