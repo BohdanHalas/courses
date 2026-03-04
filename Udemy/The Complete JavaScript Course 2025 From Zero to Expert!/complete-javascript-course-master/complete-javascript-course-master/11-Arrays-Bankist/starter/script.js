@@ -61,6 +61,24 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// Functions FUNCTIONS Функції
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = ``;
+  // .textContent = 0;
+  movements.forEach(function (movement, i, arr) {
+    const type = movement > 0 ? `deposit` : `withdrawal`;
+    const html = `
+        <div class="movements__row">
+          <div class="movements__type movements__type--${type}">${i + 1}. ${type}</div>
+          <div class="movements__value">${movement} €</div>
+        </div>`;
+    containerMovements.insertAdjacentHTML(`afterbegin`, html);
+  });
+};
+displayMovements(account1.movements);
+
+console.log(containerMovements?.innerHTML);
+/*
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -149,4 +167,22 @@ console.log(currenciesUnique);
 currenciesUnique.forEach(function (value, _, set) {
   console.log(`${value}`);
 });
+
+// Challenge #1
+
+const checkDogs = function (dogsJulia, dogsKate) {
+  const adultOrPuppy = function (age, i) {
+    age >= 3
+      ? console.log(`Dog number ${i + 1} is an adult, and is ${age} years old`)
+      : console.log(`Dog number ${i + 1} is still a puppy`);
+  };
+  const correctDogsJulia = dogsJulia.slice(1, -2);
+  // console.log(correctDogsJulia);
+  const allDogs = [...correctDogsJulia, ...dogsKate];
+  console.log(allDogs);
+  allDogs.forEach(adultOrPuppy);
+};
+
+checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
 */
