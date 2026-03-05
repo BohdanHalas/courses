@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // BANKIST APP
-/*
+///*
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -75,9 +75,23 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML(`afterbegin`, html);
   });
 };
+
+const transformUsersFullNameToUserName = function (accounts) {
+  accounts.forEach(function (account) {
+    const userFullName = account.owner;
+    const arrayWithPartOfUserNames = userFullName.toLowerCase().split(` `);
+    const arrayWithInitialUserName = arrayWithPartOfUserNames.map(partName =>
+      partName.at(0),
+    );
+    account.userName = arrayWithInitialUserName.join(``);
+  });
+};
 displayMovements(account1.movements);
 
-console.log(containerMovements?.innerHTML);
+transformUsersFullNameToUserName(accounts);
+// console.log(containerMovements?.innerHTML);
+// console.log(accounts);
+
 /*
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -197,7 +211,19 @@ const nestLvlTestArr = testArr.map(value => {
 });
 console.log(nestLvlTestArr);
 */
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
+const deposits = movements.filter(movement => movement > 0);
+console.log(deposits);
+
+const depositsForOf = [];
+for (const movement of movements) {
+  if (movement > 0) depositsForOf.push(movement);
+}
+console.log(depositsForOf);
+
+const withdrawals = movements.filter(movement => movement < 0);
+console.log(withdrawals);
 // ------------------------------------------------------------------
 // Challenge #1
 /*
