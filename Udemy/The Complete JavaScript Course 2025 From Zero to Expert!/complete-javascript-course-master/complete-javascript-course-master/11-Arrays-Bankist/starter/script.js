@@ -86,9 +86,24 @@ const transformUsersFullNameToUserName = function (accounts) {
     account.userName = arrayWithInitialUserName.join(``);
   });
 };
-displayMovements(account1.movements);
 
+const countCurrentBalance = function (accounts) {
+  accounts.forEach(function (account) {
+    const balance = account.movements.reduce(
+      (accumulator, movement) => accumulator + movement,
+    );
+    account.balance = balance + ` EUR`;
+  });
+};
+
+const printCurrentBalance = function (currentUser) {
+  labelBalance.textContent = accounts[currentUser].balance;
+};
+displayMovements(account1.movements);
 transformUsersFullNameToUserName(accounts);
+countCurrentBalance(accounts);
+printCurrentBalance(0);
+// console.log(accounts[0]);
 // console.log(containerMovements?.innerHTML);
 // console.log(accounts);
 
@@ -210,7 +225,7 @@ const nestLvlTestArr = testArr.map(value => {
   if (value > 0) return `ok`;
 });
 console.log(nestLvlTestArr);
-*/
+
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 const deposits = movements.filter(movement => movement > 0);
@@ -224,6 +239,25 @@ console.log(depositsForOf);
 
 const withdrawals = movements.filter(movement => movement < 0);
 console.log(withdrawals);
+
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const balance = movements.reduce(
+  (accumulator, movement) => accumulator + movement,
+  0,
+);
+console.log(balance);
+
+let balanceForOf = 0;
+for (const movement of movements) balanceForOf += movement;
+console.log(balanceForOf);
+
+const maximumMovement = movements.reduce(
+  (maximum, movement) => (maximum < movement ? movement : maximum),
+  movements[0],
+);
+console.log(maximumMovement);
+*/
 // ------------------------------------------------------------------
 // Challenge #1
 /*
@@ -242,4 +276,27 @@ const checkDogs = function (dogsJulia, dogsKate) {
 
 checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
 checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
+
+
+// Challenge #2
+
+const calculateAverageHumanAge = function (dogsAgesArray) {
+  const humanAges = dogsAgesArray.map(dogAge =>
+    dogAge <= 2 ? dogAge * 2 : 16 + dogAge * 4,
+  );
+  const adultHumanAges = humanAges.filter(humanAge => humanAge >= 18);
+  const averageHumanAge = adultHumanAges.reduce(
+    (sum, age, i, array) => (sum += age / array.length),
+    0,
+  );
+  console.log(humanAges);
+  console.log(adultHumanAges);
+  console.log(averageHumanAge);
+  return averageHumanAge;
+};
+
+const firstTestData = [5, 2, 4, 1, 15, 8, 3];
+const secondTestData = [16, 6, 10, 5, 6, 1, 4];
+console.log(calculateAverageHumanAge(firstTestData));
+console.log(calculateAverageHumanAge(secondTestData));
 */
