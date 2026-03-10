@@ -35,6 +35,8 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
+let currentAccount;
+
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -87,20 +89,19 @@ const transformUsersFullNameToUserName = function (accounts) {
   });
 };
 
-const countCurrentBalance = function (accounts) {
-  accounts.forEach(function (account) {
-    const balance = account.movements.reduce(
-      (accumulator, movement) => accumulator + movement,
-    );
-    account.balance = balance + ` €`;
-  });
+const countCurrentBalance = function (account) {
+  const balance = account.movements.reduce(
+    (accumulator, movement) => accumulator + movement,
+  );
+  account.balance = balance + ` €`;
 };
 
 const printCurrentBalance = function (currentUser) {
-  labelBalance.textContent = accounts[currentUser].balance;
+  labelBalance.textContent = currentUser.balance;
 };
 
-const calculateDisplaySummary = function (movements) {
+const calculateDisplaySummary = function (account) {
+  const movements = account.movements;
   const incomes = movements
     .filter(movement => movement > 0)
     .reduce((sum, movement) => sum + movement, 0);
@@ -110,7 +111,7 @@ const calculateDisplaySummary = function (movements) {
     .filter(movement => movement < 0)
     .reduce((sum, movement) => sum + movement);
   labelSumOut.textContent = Math.abs(outcomes) + ` €`;
-  const percentOfInterest = 0.012;
+  const percentOfInterest = account.interestRate / 100;
   const interest = movements
     .filter(movement => movement > 0)
     .map(deposit => deposit * percentOfInterest)
@@ -128,15 +129,45 @@ const calculateDisplaySummary = function (movements) {
   //     } else return accumulator;
   //   }, 0);
 };
-calculateDisplaySummary(account1.movements);
-displayMovements(account1.movements);
+// calculateDisplaySummary(account1.movements);
+// displayMovements(account1.movements);
 transformUsersFullNameToUserName(accounts);
-countCurrentBalance(accounts);
-printCurrentBalance(0);
+// countCurrentBalance(accounts);
+// printCurrentBalance(0);
 // console.log(accounts[0]);
 // console.log(containerMovements?.innerHTML);
 // console.log(accounts);
 
+// Event handler
+btnLogin.addEventListener(`click`, function (e) {
+  // Prevent form from submitting
+  e.preventDefault();
+  console.log(`Login`);
+
+  currentAccount = accounts.find(
+    account => account.userName === inputLoginUsername.value,
+  );
+  console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    console.log(`Login!`);
+    // Display UI and message
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(` `)[0]}`;
+    containerApp.style.opacity = 100;
+
+    // Clear input fields
+    inputLoginUsername.value = inputLoginPin.value = ``;
+    inputLoginUsername.blur();
+    inputLoginPin.blur();
+    // Display movements
+    // console.log(currentAccount);
+    displayMovements(currentAccount.movements);
+    // Display balance
+    countCurrentBalance(currentAccount);
+    printCurrentBalance(currentAccount);
+    // Display summary
+    calculateDisplaySummary(currentAccount);
+  }
+});
 /*
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -299,6 +330,20 @@ const totalDepositsInUsd = movements
   .map(movement => movement * euroToUsd)
   .reduce((summ, movement) => summ + movement);
 console.log(totalDepositsInUsd);
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const firstWithdrawal = movements.find(movement => movement < 0);
+console.log(firstWithdrawal);
+
+console.log(accounts);
+
+const account = accounts.find(account => account.owner === `Jessica Davis`);
+console.log(account);
+let accountForOf = null;
+for (const account of accounts) {
+  if (account.owner === `Jessica Davis`) accountForOf = account;
+}
+console.log(accountForOf);
 */
 // ------------------------------------------------------------------
 // Challenge #1
@@ -321,7 +366,7 @@ checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
 
 
 // Challenge #2
-*/
+
 const calculateAverageHumanAge = function (dogsAgesArray) {
   const humanAges = dogsAgesArray.map(dogAge =>
     dogAge <= 2 ? dogAge * 2 : 16 + dogAge * 4,
@@ -354,3 +399,4 @@ const updatedCalculateAverageHumanAge = function (dogsAgesArray) {
 
 console.log(updatedCalculateAverageHumanAge(firstTestData));
 console.log(updatedCalculateAverageHumanAge(secondTestData));
+*/
