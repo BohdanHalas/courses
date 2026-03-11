@@ -90,14 +90,13 @@ const transformUsersFullNameToUserName = function (accounts) {
 };
 
 const countCurrentBalance = function (account) {
-  const balance = account.movements.reduce(
+  account.balance = account.movements.reduce(
     (accumulator, movement) => accumulator + movement,
   );
-  account.balance = balance + ` €`;
 };
 
 const printCurrentBalance = function (currentUser) {
-  labelBalance.textContent = currentUser.balance;
+  labelBalance.textContent = currentUser.balance + ` €`;
 };
 
 const calculateDisplaySummary = function (account) {
@@ -158,25 +157,67 @@ btnLogin.addEventListener(`click`, function (e) {
     inputLoginUsername.value = inputLoginPin.value = ``;
     inputLoginUsername.blur();
     inputLoginPin.blur();
-    // Display movements
-    // console.log(currentAccount);
-    displayMovements(currentAccount.movements);
-    // Display balance
-    countCurrentBalance(currentAccount);
-    printCurrentBalance(currentAccount);
-    // Display summary
-    calculateDisplaySummary(currentAccount);
+    // Update UI
+    updateUI(currentAccount);
   }
 });
-/*
+
+btnTransfer.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(
+    account => account.userName === inputTransferTo.value,
+  );
+  console.log(amount, receiverAccount);
+
+  if (
+    amount > 0 &&
+    receiverAccount &&
+    currentAccount.balance >= amount &&
+    receiverAccount?.userName !== currentAccount.userName
+  ) {
+    // doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAccount.movements.push(amount);
+    // Update UI
+    updateUI(currentAccount);
+  }
+  inputTransferAmount.value = inputTransferTo.value = ``;
+});
+
+const updateUI = function (account) {
+  displayMovements(account.movements);
+  countCurrentBalance(account);
+  printCurrentBalance(account);
+  calculateDisplaySummary(account);
+};
+
+const deleteAccount = function () {};
+
+btnClose.addEventListener(`click`, function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.userName &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      account => account.userName === currentAccount.userName,
+    );
+    // console.log(index);
+    accounts.splice(index, 1);
+    // console.log(accounts);
+    containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin.value = ``;
+    labelWelcome.textContent = `Log in to get started`;
+  }
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
-
-
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
+/*
 /////////////////////////////////////////////////
 let arr = [`a`, `b`, `c`, `d`, `e`];
 
@@ -259,7 +300,7 @@ currenciesUnique.forEach(function (value, _, set) {
 });
 
 let EURToUSD = 1.1;
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
 
 // const movementsInUSD = movements.map(function (movement, i, arr) {
 //   return movement * EURToUSD;
