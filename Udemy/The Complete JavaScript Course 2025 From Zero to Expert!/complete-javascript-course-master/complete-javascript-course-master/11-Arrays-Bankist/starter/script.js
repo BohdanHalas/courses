@@ -194,6 +194,21 @@ const updateUI = function (account) {
 
 const deleteAccount = function () {};
 
+btnLoan.addEventListener(`click`, function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (
+    amount > 0 &&
+    currentAccount.movements.some(movement => movement >= amount * 0.1)
+  ) {
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = ``;
+});
+
 btnClose.addEventListener(`click`, function (e) {
   e.preventDefault();
 
@@ -385,6 +400,63 @@ for (const account of accounts) {
   if (account.owner === `Jessica Davis`) accountForOf = account;
 }
 console.log(accountForOf);
+
+
+console.log(movements);
+const lastWithdrawal = movements.findLast(movement => movement < 0);
+console.log(lastWithdrawal);
+
+const findLastLargeMovement = function (movements) {
+  const lastLargeMovement = movements.findLast(
+    movement => movement >= 2000 || movement <= -2000,
+  );
+  const indexLastLargeMovement = movements.findLastIndex(
+    movement => movement >= 2000 || movement <= -2000,
+  );
+  console.log(
+    `Your last large movement is ${lastLargeMovement > 0 ? `deposit` : `withdrawal`} - ${Math.abs(lastLargeMovement)} was ${movements.length - indexLastLargeMovement} movements ago`,
+  );
+};
+findLastLargeMovement(movements);
+
+console.log(movements);
+// EQUALITY
+console.log(movements.includes(-130));
+
+// SOME: CONDITION
+const anyDeposits = movements.some(movement => movement > 0);
+console.log(anyDeposits);
+
+// EVERY: CONDITION
+console.log(movements.every(movement => movement > 0));
+
+// Separate callback
+const deposit = movement => movement > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+
+
+const array = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(array.flat());
+
+const arrayDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrayDeep.flat(2));
+
+// flat
+
+const overallBalance = accounts
+  .map(account => account.movements)
+  .flat()
+  .reduce((account, movement) => account + movement);
+console.log(overallBalance);
+
+// flatMap
+
+const overallBalance2 = accounts
+  .flatMap(account => account.movements)
+  .reduce((account, movement) => account + movement);
+console.log(overallBalance2);
 */
 // ------------------------------------------------------------------
 // Challenge #1
