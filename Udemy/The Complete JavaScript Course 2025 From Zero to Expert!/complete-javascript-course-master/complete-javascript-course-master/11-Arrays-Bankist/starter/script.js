@@ -513,3 +513,96 @@ const updatedCalculateAverageHumanAge = function (dogsAgesArray) {
 console.log(updatedCalculateAverageHumanAge(firstTestData));
 console.log(updatedCalculateAverageHumanAge(secondTestData));
 */
+// Challenge #4
+const breeds = [
+  {
+    breed: 'German Shepherd',
+    averageWeight: 32,
+    activities: ['fetch', 'swimming'],
+  },
+  {
+    breed: 'Dalmatian',
+    averageWeight: 24,
+    activities: ['running', 'fetch', 'agility'],
+  },
+  {
+    breed: 'Labrador',
+    averageWeight: 28,
+    activities: ['swimming', 'fetch'],
+  },
+  {
+    breed: 'Beagle',
+    averageWeight: 12,
+    activities: ['digging', 'fetch'],
+  },
+  {
+    breed: 'Husky',
+    averageWeight: 26,
+    activities: ['running', 'agility', 'swimming'],
+  },
+  {
+    breed: 'Bulldog',
+    averageWeight: 36,
+    activities: ['sleeping'],
+  },
+  {
+    breed: 'Poodle',
+    averageWeight: 18,
+    activities: ['agility', 'fetch'],
+  },
+];
+
+const huskyWeight = breeds.find(
+  breed => breed.breed === `Husky`,
+)?.averageWeight;
+console.log(huskyWeight);
+
+const dogBothActivities = breeds.find(
+  breed =>
+    breed.activities.includes(`running`) && breed.activities.includes(`fetch`),
+)?.breed;
+console.log(dogBothActivities);
+
+const allActivities = breeds.flatMap(breed => breed.activities);
+console.log(allActivities);
+
+const allUniqueActivities = [
+  ...new Set(breeds.flatMap(breed => breed.activities)),
+];
+console.log(allUniqueActivities);
+
+const swimmingAdjacent = new Set(
+  breeds
+    .filter(breed => breed.activities.includes(`swimming`))
+    .flatMap(breed => breed.activities),
+);
+
+swimmingAdjacent.delete(`swimming`);
+console.log([...swimmingAdjacent]);
+
+console.log(breeds.every(breed => breed.averageWeight >= 10));
+console.log(breeds.some(breed => breed.activities.length >= 3));
+
+// BONUS
+
+const breedsWhichLikesFetch = breeds.filter(breed =>
+  breed.activities.includes(`fetch`),
+);
+console.log(breedsWhichLikesFetch);
+
+const averageWeightsBreedsWhichLikesFetch = breedsWhichLikesFetch.map(
+  breed => breed.averageWeight,
+);
+console.log(averageWeightsBreedsWhichLikesFetch);
+
+const maxWeight = Math.max(...averageWeightsBreedsWhichLikesFetch);
+console.log(maxWeight);
+
+const indexOfMaxWeight = averageWeightsBreedsWhichLikesFetch.findIndex(
+  weight => weight === maxWeight,
+);
+console.log(indexOfMaxWeight);
+
+const breedWhichHasTheHeaviestWeightAndLikesFetch =
+  breedsWhichLikesFetch[indexOfMaxWeight].breed;
+console.log(breedWhichHasTheHeaviestWeightAndLikesFetch);
