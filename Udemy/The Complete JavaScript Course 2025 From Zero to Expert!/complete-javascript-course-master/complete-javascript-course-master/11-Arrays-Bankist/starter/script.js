@@ -64,10 +64,13 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Functions FUNCTIONS Функції
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = ``;
   // .textContent = 0;
-  movements.forEach(function (movement, i, arr) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (movement, i, arr) {
     const type = movement > 0 ? `deposit` : `withdrawal`;
     const html = `
         <div class="movements__row">
@@ -226,6 +229,13 @@ btnClose.addEventListener(`click`, function (e) {
     inputCloseUsername.value = inputClosePin.value = ``;
     labelWelcome.textContent = `Log in to get started`;
   }
+});
+
+let sortedState = false;
+btnSort.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sortedState);
+  sortedState = !sortedState;
 });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -457,6 +467,36 @@ const overallBalance2 = accounts
   .flatMap(account => account.movements)
   .reduce((account, movement) => account + movement);
 console.log(overallBalance2);
+
+// SORTING ARRAYS
+
+// Strings
+const owners = [`Jonas`, `Zach`, `Adam`, `Martha`];
+console.log(owners.sort());
+console.log(owners);
+
+// Numbers
+console.log(movements);
+console.log(movements.sort());
+
+// return <0, A, B - keep order
+// return >0, B, A - switch order
+
+// Висхідний
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (b > a) return -1;
+// });
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Нисхідний
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (b > a) return 1;
+// });
+movements.sort((a, b) => b - a);
+console.log(movements);
 */
 // ------------------------------------------------------------------
 // Challenge #1
@@ -512,7 +552,7 @@ const updatedCalculateAverageHumanAge = function (dogsAgesArray) {
 
 console.log(updatedCalculateAverageHumanAge(firstTestData));
 console.log(updatedCalculateAverageHumanAge(secondTestData));
-*/
+
 // Challenge #4
 const breeds = [
   {
@@ -606,3 +646,4 @@ console.log(indexOfMaxWeight);
 const breedWhichHasTheHeaviestWeightAndLikesFetch =
   breedsWhichLikesFetch[indexOfMaxWeight].breed;
 console.log(breedWhichHasTheHeaviestWeightAndLikesFetch);
+*/
