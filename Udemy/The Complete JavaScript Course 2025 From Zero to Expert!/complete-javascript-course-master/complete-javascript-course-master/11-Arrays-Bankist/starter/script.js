@@ -580,6 +580,30 @@ const newMovements = movements.with(1, 2000);
 console.log(movements);
 console.log(newMovements);
 */
+
+// 1.
+const bankDepositSum = accounts
+  .flatMap(account => account.movements)
+  .filter(movement => movement > 0)
+  .reduce((total, movement) => total + movement);
+console.log(bankDepositSum);
+
+// 2.
+// const amountDeposit1000 = accounts
+//   .flatMap(account => account.movements)
+//   .filter(movement => movement >= 1000).length;
+// console.log(amountDeposit1000);
+
+const amountDeposit1000 = accounts
+  .flatMap(account => account.movements)
+  .reduce((count, movement) => (movement >= 1000 ? ++count : count), 0);
+// .reduce((count, movement) => (movement >= 1000 ? count + 1 : count), 0);
+
+console.log(amountDeposit1000);
+
+let a = 10;
+console.log(++a);
+console.log(a);
 // ------------------------------------------------------------------
 // Challenge #1
 /*
