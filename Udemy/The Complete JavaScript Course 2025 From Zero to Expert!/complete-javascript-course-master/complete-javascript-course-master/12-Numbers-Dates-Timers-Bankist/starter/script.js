@@ -51,6 +51,8 @@ const account2 = {
 
 const accounts = [account1, account2];
 
+let currentAccount;
+
 /////////////////////////////////////////////////
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -91,7 +93,7 @@ const displayMovements = function (movements, sort = false) {
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i + 1}. ${type}</div>
-          <div class="movements__value">${movement} €</div>
+          <div class="movements__value">${movement.toFixed(2)} €</div>
         </div>`;
     containerMovements.insertAdjacentHTML(`afterbegin`, html);
   });
@@ -115,7 +117,7 @@ const countCurrentBalance = function (account) {
 };
 
 const printCurrentBalance = function (currentUser) {
-  labelBalance.textContent = currentUser.balance + ` €`;
+  labelBalance.textContent = currentUser.balance.toFixed(2) + ` €`;
 };
 
 const calculateDisplaySummary = function (account) {
@@ -123,19 +125,19 @@ const calculateDisplaySummary = function (account) {
   const incomes = movements
     .filter(movement => movement > 0)
     .reduce((sum, movement) => sum + movement, 0);
-  labelSumIn.textContent = incomes + ` €`;
+  labelSumIn.textContent = incomes.toFixed(2) + ` €`;
 
   const outcomes = movements
     .filter(movement => movement < 0)
     .reduce((sum, movement) => sum + movement);
-  labelSumOut.textContent = Math.abs(outcomes) + ` €`;
+  labelSumOut.textContent = Math.abs(outcomes.toFixed(2)) + ` €`;
   const percentOfInterest = account.interestRate / 100;
   const interest = movements
     .filter(movement => movement > 0)
     .map(deposit => deposit * percentOfInterest)
     .filter(interest => interest >= 1)
     .reduce((accumulator, interest) => accumulator + interest);
-  labelSumInterest.textContent = interest + ` €`;
+  labelSumInterest.textContent = interest.toFixed(2) + ` €`;
   // console.log(intersts);
   // const interestMyAlternative = movements
   //   .filter(movement => movement > 0)
@@ -216,7 +218,7 @@ const deleteAccount = function () {};
 btnLoan.addEventListener(`click`, function (e) {
   e.preventDefault();
 
-  const amount = +inputLoanAmount.value;
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (
     amount > 0 &&
@@ -255,7 +257,7 @@ btnSort.addEventListener(`click`, function (e) {
 });
 
 // LECTURES
-
+/*
 console.log(23 === 23.0);
 
 // Base 10: 0 to 9; 1/10 = 0.1 | 10/3 = 3.3333333
@@ -291,3 +293,45 @@ console.log(Number.isFinite(23 / 0));
 console.log(Number.isInteger(23));
 console.log(Number.isInteger(23.0));
 console.log(Number.isInteger(23 / 0));
+*/
+
+console.log(Math.sqrt(25));
+console.log(25 ** (1 / 2));
+console.log(8 ** (1 / 3));
+
+console.log(Math.max(5, 18, 23, 11, 2));
+console.log(Math.max(5, 18, `23px`, 11, 2));
+
+console.log(Math.min(5, 18, 23, 11, 2));
+
+console.log(Math.PI * Number.parseFloat(`10px`) ** 2);
+
+console.log(Math.trunc(Math.random() * 6) + 1);
+
+const randomInt = function (min, max) {
+  const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  return randomNumber;
+};
+console.log(randomInt(10, 20));
+console.log(randomInt(0, 3));
+
+// Rounding integers
+
+console.log(Math.round(23.3));
+console.log(Math.round(23.9));
+
+console.log(Math.ceil(23.3));
+console.log(Math.ceil(23.9));
+
+console.log(Math.floor(23.3));
+console.log(Math.floor(23.9));
+
+console.log(Math.trunc(23.3));
+
+console.log(Math.trunc(-23.3));
+console.log(Math.floor(-23.3));
+
+// Rounding decimals
+console.log((2.7).toFixed(0));
+console.log((2.7).toFixed(3));
+console.log(+(2.345).toFixed(2));
