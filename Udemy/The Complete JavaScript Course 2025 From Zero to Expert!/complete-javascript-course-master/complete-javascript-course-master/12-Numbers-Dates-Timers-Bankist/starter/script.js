@@ -82,7 +82,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 // Functions FUNCTIONS Функції
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs((date2 - date1) / 1000 / 60 / 60 / 24));
   const daysPassed = calcDaysPassed(new Date(), date);
@@ -90,12 +90,20 @@ const formatMovementDate = function (date) {
   if (daysPassed === 0) return `Today`;
   if (daysPassed === 1) return `Yesterday`;
   if (daysPassed <= 7) return `${daysPassed} days ago`;
-  const day = `${date.getDate()}`.padStart(2, `0`);
-  const month = `${date.getMonth() + 1}`.padStart(2, `0`);
-  const year = date.getFullYear();
-  const hours = `${date.getHours()}`.padStart(2, `0`);
-  const minutes = `${date.getMinutes()}`.padStart(2, `0`);
-  return `${day}/${month}/${year}, ${hours}:${minutes}`;
+  // const day = `${date.getDate()}`.padStart(2, `0`);
+  // const month = `${date.getMonth() + 1}`.padStart(2, `0`);
+  // const year = date.getFullYear();
+  // const hours = `${date.getHours()}`.padStart(2, `0`);
+  // const minutes = `${date.getMinutes()}`.padStart(2, `0`);
+  // return `${day}/${month}/${year}, ${hours}:${minutes}`;
+  return new Intl.DateTimeFormat(locale).format(date);
+};
+
+const formatCurrency = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: `currency`,
+    currency: currency,
+  }).format(value);
 };
 
 const displayMovements = function (account, sort = false) {
@@ -118,12 +126,19 @@ const displayMovements = function (account, sort = false) {
     const { movement, movementDate } = object;
     const type = movement > 0 ? `deposit` : `withdrawal`;
     const date = new Date(movementDate);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, account.locale);
+
+    const formattedMovement = formatCurrency(
+      movement,
+      account.locale,
+      account.currency,
+    );
+
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i + 1}. ${type}</div>
           <div class="movements__date">${displayDate}</div>
-          <div class="movements__value">${movement.toFixed(2)} €</div>
+          <div class="movements__value">${formattedMovement}</div>
         </div>`;
     containerMovements.insertAdjacentHTML(`afterbegin`, html);
   });
@@ -147,7 +162,12 @@ const countCurrentBalance = function (account) {
 };
 
 const printCurrentBalance = function (currentUser) {
-  labelBalance.textContent = currentUser.balance.toFixed(2) + ` €`;
+  const balance = formatCurrency(
+    currentUser.balance,
+    currentUser.locale,
+    currentUser.currency,
+  );
+  labelBalance.textContent = balance;
 };
 
 const calculateDisplaySummary = function (account) {
@@ -155,19 +175,34 @@ const calculateDisplaySummary = function (account) {
   const incomes = movements
     .filter(movement => movement > 0)
     .reduce((sum, movement) => sum + movement, 0);
-  labelSumIn.textContent = incomes.toFixed(2) + ` €`;
 
-  const outcomes = movements
-    .filter(movement => movement < 0)
-    .reduce((sum, movement) => sum + movement);
-  labelSumOut.textContent = Math.abs(outcomes.toFixed(2)) + ` €`;
+  labelSumIn.textContent = formatCurrency(
+    incomes,
+    account.locale,
+    account.currency,
+  );
+
+  const outcomes = Math.abs(
+    movements
+      .filter(movement => movement < 0)
+      .reduce((sum, movement) => sum + movement),
+  );
+  labelSumOut.textContent = formatCurrency(
+    outcomes,
+    account.locale,
+    account.currency,
+  );
   const percentOfInterest = account.interestRate / 100;
   const interest = movements
     .filter(movement => movement > 0)
     .map(deposit => deposit * percentOfInterest)
     .filter(interest => interest >= 1)
     .reduce((accumulator, interest) => accumulator + interest);
-  labelSumInterest.textContent = interest.toFixed(2) + ` €`;
+  labelSumInterest.textContent = formatCurrency(
+    interest,
+    account.locale,
+    account.currency,
+  );
   // console.log(intersts);
   // const interestMyAlternative = movements
   //   .filter(movement => movement > 0)
@@ -188,6 +223,8 @@ transformUsersFullNameToUserName(accounts);
 // console.log(containerMovements?.innerHTML);
 // console.log(accounts);
 
+//Experimenting with API
+
 // Event handler
 
 btnLogin.addEventListener(`click`, function (e) {
@@ -207,13 +244,26 @@ btnLogin.addEventListener(`click`, function (e) {
 
     // create a current date and time
     const now = new Date();
-    const day = `${now.getDate()}`.padStart(2, `0`);
-    const month = `${now.getMonth() + 1}`.padStart(2, `0`);
-    const year = now.getFullYear();
-    const hours = `${now.getHours()}`.padStart(2, `0`);
-    const minutes = `${now.getMinutes()}`.padStart(2, `0`);
 
-    labelDate.textContent = `${day}/${month}/${year}, ${hours}:${minutes}`;
+    const options = {
+      year: `numeric`,
+      month: `numeric`,
+      day: `numeric`,
+      hour: `numeric`,
+      minute: `numeric`,
+    };
+    const locale = currentAccount.locale;
+    console.log(locale);
+    labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(
+      now,
+    );
+    // const day = `${now.getDate()}`.padStart(2, `0`);
+    // const month = `${now.getMonth() + 1}`.padStart(2, `0`);
+    // const year = now.getFullYear();
+    // const hours = `${now.getHours()}`.padStart(2, `0`);
+    // const minutes = `${now.getMinutes()}`.padStart(2, `0`);
+    // labelDate.textContent = `${day}/${month}/${year}, ${hours}:${minutes}`;
+
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = ``;
     inputLoginUsername.blur();
@@ -268,10 +318,12 @@ btnLoan.addEventListener(`click`, function (e) {
     amount > 0 &&
     currentAccount.movements.some(movement => movement >= amount * 0.1)
   ) {
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
+    setTimeout(function () {
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    updateUI(currentAccount);
+      updateUI(currentAccount);
+    }, 2.5 * 1000);
   }
   inputLoanAmount.value = ``;
 });
@@ -303,9 +355,9 @@ btnSort.addEventListener(`click`, function (e) {
 });
 
 // FAKE ALWAYS LOGGED IN
-// currentAccount = account1;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
 
 // const now = new Date();
 // const day = `${now.getDate()}`.padStart(2, `0`);
@@ -506,7 +558,7 @@ console.log(Date.now());
 
 future.setFullYear(2040);
 console.log(future);
-*/
+
 
 const future = new Date(2037, 10, 19, 15, 23);
 console.log(+future);
@@ -516,3 +568,57 @@ const calcDaysPassed = (date1, date2) =>
 
 const day1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
 console.log(day1);
+
+const num = 38507784.23;
+
+const options = {
+  // style: 'unit',
+  // style: 'percent',
+  style: 'currency',
+  // unit: 'mile-per-hour',
+  // unit: 'celsius',
+  currency: `UAH`,
+  // useGrouping: false,
+};
+
+console.log(`US: `, new Intl.NumberFormat(`en-US`, options).format(num));
+
+console.log(`Germany: `, new Intl.NumberFormat(`de-DE`, options).format(num));
+
+console.log(`Spain: `, new Intl.NumberFormat(`es-ES`, options).format(num));
+
+console.log(`Ukraine: `, new Intl.NumberFormat(`ua-UA`, options).format(num));
+
+console.log(
+  `Browser(${navigator.language}): `,
+  new Intl.NumberFormat(navigator.language, options).format(num),
+);
+*/
+
+// setTimeout
+const ingredients = [`Olives`, `Spinach`];
+const orderPizzaTimer = setTimeout(
+  (ing1, ing2) =>
+    console.log(`Here is your pizza! 🍕 With: ${ing1} and ${ing2}`),
+  1000 * 3,
+  ...ingredients,
+);
+console.log(`Waiting!`);
+
+if (ingredients.includes(`Spinach`)) clearTimeout(orderPizzaTimer);
+
+// setInterval
+// setInterval(function () {
+//   const now = new Date();
+//   console.log(now);
+// }, 1 * 1000);
+
+const clock = setInterval(function () {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  console.log(`Нині ${hours}:${minutes}:${seconds} по Мадриду`);
+}, 1 * 1000);
+
+setTimeout(() => clearTimeout(clock), 5 * 1000);
