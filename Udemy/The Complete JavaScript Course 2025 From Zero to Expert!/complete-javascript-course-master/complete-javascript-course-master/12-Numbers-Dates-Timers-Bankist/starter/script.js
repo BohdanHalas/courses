@@ -395,9 +395,9 @@ btnSort.addEventListener(`click`, function (e) {
 });
 
 // FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // const now = new Date();
 // const day = `${now.getDate()}`.padStart(2, `0`);
