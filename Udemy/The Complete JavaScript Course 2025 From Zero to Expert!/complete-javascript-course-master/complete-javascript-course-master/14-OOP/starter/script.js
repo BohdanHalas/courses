@@ -30,3 +30,30 @@ const jay = 'Jay';
 
 console.log(bohdan instanceof Person);
 console.log(jay instanceof Person);
+
+// Prototypes
+console.log(Person.prototype);
+
+Person.prototype.calcAge = function () {
+  console.log(2026 - this.birthYear);
+};
+
+bohdan.calcAge();
+nelya.calcAge();
+jack.calcAge();
+
+console.log(bohdan.__proto__);
+console.log(bohdan.__proto__ === Person.prototype);
+console.log(Person.__proto__);
+
+console.log(Person.prototype.isPrototypeOf(bohdan));
+console.log(Person.prototype.isPrototypeOf(nelya));
+console.log(Person.prototype.isPrototypeOf(Person));
+
+// .prototypeOfLinkedObjects
+
+Person.prototype.species = 'Homo Sapiens';
+console.log(bohdan);
+
+console.log(bohdan.hasOwnProperty('firstName'));
+console.log(bohdan.hasOwnProperty('species'));
