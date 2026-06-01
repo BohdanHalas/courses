@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 const Person = function (firstName, birthYear) {
   //   console.log(this);
 
@@ -57,3 +57,54 @@ console.log(bohdan);
 
 console.log(bohdan.hasOwnProperty('firstName'));
 console.log(bohdan.hasOwnProperty('species'));
+
+console.log(bohdan.__proto__);
+console.log(bohdan.__proto__.__proto__);
+console.log(bohdan.__proto__.__proto__.__proto__);
+
+console.dir(Person.prototype.constructor);
+
+const arr = [3, 6, 4, 5, 6, 9, 3, 6, 9];
+console.log(arr.__proto__);
+console.log(arr.__proto__ === Array.prototype);
+
+console.log(arr.__proto__.__proto__);
+
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+};
+
+console.log(arr.unique());
+*/
+
+// Challenge #1
+/*
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(this.speed);
+};
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(this.speed);
+};
+
+const bmw = new Car('BMW', 120);
+const mercedes = new Car('Mercedes', 95);
+
+bmw.accelerate();
+bmw.brake();
+bmw.brake();
+bmw.brake();
+mercedes.brake();
+mercedes.accelerate();
+mercedes.accelerate();
+mercedes.accelerate();
+mercedes.accelerate();
+
+console.log(bmw, mercedes);
+*/
