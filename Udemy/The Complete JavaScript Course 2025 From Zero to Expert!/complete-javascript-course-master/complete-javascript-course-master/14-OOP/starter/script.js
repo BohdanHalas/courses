@@ -1,5 +1,6 @@
 'use strict';
 
+/*
 const Person = function (firstName, birthYear) {
   //   console.log(this);
 
@@ -84,37 +85,6 @@ Array.prototype.unique = function () {
 
 console.log(arr.unique());
 
-// Challenge #1
-/*
-const Car = function (make, speed) {
-  this.make = make;
-  this.speed = speed;
-};
-
-Car.prototype.accelerate = function () {
-  this.speed += 10;
-  console.log(this.speed);
-};
-Car.prototype.brake = function () {
-  this.speed -= 5;
-  console.log(this.speed);
-};
-
-const bmw = new Car('BMW', 120);
-const mercedes = new Car('Mercedes', 95);
-
-bmw.accelerate();
-bmw.brake();
-bmw.brake();
-bmw.brake();
-mercedes.brake();
-mercedes.accelerate();
-mercedes.accelerate();
-mercedes.accelerate();
-mercedes.accelerate();
-
-console.log(bmw, mercedes);
-*/
 
 // class expression
 
@@ -198,3 +168,100 @@ console.log(account.latest);
 account.latest = 50;
 
 console.log(account.movements);
+
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+
+console.log(steven);
+
+steven.name = 'Steven';
+steven.birthYear = 2002;
+console.log(steven);
+steven.calcAge();
+
+console.log(steven.__proto__ === PersonProto);
+
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1979);
+console.log(sarah);
+sarah.calcAge();
+
+*/
+
+// Challenge #1
+/*
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(this.speed);
+};
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(this.speed);
+};
+
+const bmw = new Car('BMW', 120);
+const mercedes = new Car('Mercedes', 95);
+
+bmw.accelerate();
+bmw.brake();
+bmw.brake();
+bmw.brake();
+mercedes.brake();
+mercedes.accelerate();
+mercedes.accelerate();
+mercedes.accelerate();
+mercedes.accelerate();
+
+console.log(bmw, mercedes);
+*/
+
+// Challenge #2
+
+class Auto {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(this.speed);
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(this.speed);
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+  set speedUS(shvydkist) {
+    this.speed = shvydkist * 1.6;
+  }
+}
+const ford = new Auto('Ford', 120);
+
+console.log(ford);
+ford.speedUS;
+console.log(ford.speedUS);
+ford.accelerate();
+ford.brake();
+ford.accelerate();
+console.log(ford);
+ford.speedUS = 50;
+console.log(ford);
