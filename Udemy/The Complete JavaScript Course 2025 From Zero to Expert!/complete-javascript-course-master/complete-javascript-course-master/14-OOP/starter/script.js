@@ -319,6 +319,91 @@ console.log(jay);
 jay.introduce();
 jay.calcAge();
 console.dir(jay);
+
+/////////////////////////////////////////////////////////////////////
+// Encapsulation: Private Class Fields and Methods
+
+// 1) Public fields
+// 2) Private fields
+// 3) Public methods
+// 4) Private methods
+// STATIC VERSION of these 4
+class Account {
+  locale = navigator.language;
+  bank = 'Bankist';
+  #movements = [];
+  #pin;
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currecny = currency;
+    this.#pin = pin;
+    // this.movements = [];
+    // this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Public interface (API)
+  getMovements() {
+    return this.#movements;
+    // Not chainable
+  }
+  deposit(val) {
+    this.#movements.push(val);
+    return this;
+  }
+  withdraw(val) {
+    this.deposit(-val);
+    return this;
+  }
+
+  #approveLoan(val) {
+    // Fake method
+    return true;
+  }
+  requestLoan(val) {
+    if (this.#approveLoan()) {
+      this.deposit(val);
+      console.log(`Loan approved!`);
+    }
+    return this;
+  }
+  // static test() {
+  //   console.log('STATIC');
+  // }
+}
+
+const acc1 = new Account('Jonas', 'EUR', 1111);
+console.log(acc1);
+
+// acc1.movements.push(250);
+// acc1.movements.push(-140);
+
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+// acc1.approveLoan(1000);
+// acc1.#approveLoan(1000);
+
+console.log(acc1);
+// console.log(acc1.pin);
+
+// acc1.movements = [];
+console.log(acc1);
+console.log(acc1.getMovements());
+// console.log(acc1.#movements);
+
+// Account.test();
+
+const mov = acc1
+  .deposit(300)
+  .withdraw(100)
+  .withdraw(50)
+  .requestLoan(25000)
+  .withdraw(4000)
+  .getMovements();
+console.log(acc1.getMovements());
 */
 /////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -432,4 +517,52 @@ tesla.accelerate();
 tesla.accelerate();
 
 // console.log(tesla);
+
+
+// Challenge #4
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(this.speed);
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(this.speed);
+    return this;
+  }
+
+  get speedUS() {
+    return this._speed;
+  }
+  set speedUS(speed) {
+    this._speed = speed * 1.6;
+  }
+}
+
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(this.speed);
+    this.#charge--;
+    return this;
+  }
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+}
+const rivian = new EVCl(`Rivian`, 120, 23);
+console.log(rivian);
+
+rivian.accelerate().accelerate().brake().chargeBattery(100);
+console.log(rivian);
 */
