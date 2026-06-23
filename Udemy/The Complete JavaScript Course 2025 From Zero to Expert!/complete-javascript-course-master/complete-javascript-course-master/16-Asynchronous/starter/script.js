@@ -12,6 +12,14 @@ const countriesContainer = document.querySelector('.countries');
 //https://countries-api-836d.onrender.com/countries/
 
 ///////////////////////////////////////
+const renderError = function (msg) {
+  countriesContainer?.insertAdjacentText('beforeend', msg);
+  // countriesContainer.style.opacity = 1;
+};
+
+const noNeighbours = function () {
+  throw new Error('Country has not a neighbours');
+};
 
 const renderCountry = function (data, className = '') {
   const html = `<article class="country ${className}">
@@ -25,7 +33,7 @@ const renderCountry = function (data, className = '') {
           </div>
         </article>`;
   countriesContainer?.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 };
 /*
 
@@ -140,32 +148,152 @@ const getCountryAndNeighbour = function (country) {
 //     });
 // };
 
+const getJSON = function (url, errorMsg = `Something went wrong`) {
+  return fetch(url).then(response => {
+    console.log(response);
+
+    if (!response.ok) throw new Error(`${errorMsg}, ${response.status}`);
+
+    return response.json();
+  });
+};
+
+// const getCountryData = function (country) {
+//   // Country 1
+//   fetch(`https://countries-api-836d.onrender.com/countries/name/${country}`)
+//     .then(response => {
+//       console.log(response);
+
+//       if (!response.ok)
+//         throw new Error(`Country not found (${response.status})`);
+
+//       return response.json();
+//     })
+//     .then(data => {
+//       renderCountry(data[0]);
+//       // const neighbour = data[0].borders[0];
+//       const neighbour = 'narnia';
+//       if (!neighbour) return;
+//       // Country 2
+//       return fetch(
+//         `https://countries-api-836d.onrender.com/countries/alpha/${neighbour}`,
+//       );
+//     })
+//     .then(response => {
+//       console.log(response);
+//       if (!response.ok)
+//         throw new Error(`Country not found (${response.status})`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       renderCountry(data, 'neighbour');
+//       //   console.log(data);
+//       const neighbour = data.borders[0];
+//       // console.log(neighbour);
+//       if (!neighbour) return;
+//       // Country 3
+//       return fetch(
+//         `https://countries-api-836d.onrender.com/countries/alpha/${neighbour}`,
+//       );
+//     })
+//     .then(response => response.json())
+//     .then(data => renderCountry(data, 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err} KAPPA`);
+//       renderError(`Something went wrong: ${err.message}. Try again!`);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+
 const getCountryData = function (country) {
   // Country 1
-  fetch(`https://countries-api-836d.onrender.com/countries/name/${country}`)
-    .then(response => response.json())
+  getJSON(
+    `https://countries-api-836d.onrender.com/countries/name/${country}`,
+    `Country not found`,
+  )
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0].borders[0];
-      if (!neighbour) return;
+      // const neighbour = 'narnia';
+      if (!neighbour) noNeighbours();
       // Country 2
-      return fetch(
+      return getJSON(
         `https://countries-api-836d.onrender.com/countries/alpha/${neighbour}`,
+        `Country not found`,
       );
     })
-    .then(response => response.json())
     .then(data => {
       renderCountry(data, 'neighbour');
       //   console.log(data);
       const neighbour = data.borders[0];
-      console.log(neighbour);
-      if (!neighbour) return;
+      // console.log(neighbour);
+      if (!neighbour) noNeighbours();
       // Country 3
-      return fetch(
+      return getJSON(
         `https://countries-api-836d.onrender.com/countries/alpha/${neighbour}`,
+        `Country not found`,
       );
     })
-    .then(response => response.json())
-    .then(data => renderCountry(data, 'neighbour'));
+    .then(data => renderCountry(data, 'neighbour'))
+    .catch(err => {
+      console.error(`${err} KAPPA`);
+      renderError(`Something went wrong: ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
 };
-getCountryData(`ukraine`);
+
+btn.addEventListener('click', function () {
+  getCountryData(`Australia`);
+});
+// getCountryData(`westeros`);
+
+/////////////////////////////
+// Challenge #1
+
+// const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
+
+const testCoords = [52.508, 13.381];
+const testCoords2 = [19.037, 72.873];
+const testCoords3 = [51.6175, 24.9136];
+
+const whereAmI = function (lat, lng) {
+  const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
+  // console.log(lat);
+  // console.log(lng);
+  let nameCountry;
+  fetch(newAPI)
+    .then(response => {
+      // console.log(response);
+      if (!response.ok)
+        throw new Error(`Smth went wrong: (${response.status})`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(`You are in ${data.city}, ${data.countryName}`);
+      // console.log(data);
+      nameCountry = data.countryName;
+      // console.log(nameCountry);
+      // getCountryData(nameCountry);
+      return fetch(
+        `https://countries-api-836d.onrender.com/countries/name/${nameCountry}`,
+      );
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Country not found: ${response.status}`);
+      return response.json();
+    })
+    .then(data => renderCountry(data[0]))
+    .catch(err => console.error(`${err.message}, OH NO`))
+    .finally(() => (countriesContainer.style.opacity = 1));
+  // console.log(nameCountry);
+
+  // getCountryData();
+};
+whereAmI(...testCoords);
+whereAmI(...testCoords2);
+whereAmI(...testCoords3);
