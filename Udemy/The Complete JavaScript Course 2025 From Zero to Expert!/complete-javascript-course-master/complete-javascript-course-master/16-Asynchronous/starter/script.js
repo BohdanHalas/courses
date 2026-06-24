@@ -246,14 +246,143 @@ const getCountryData = function (country) {
     });
 };
 
-btn.addEventListener('click', function () {
-  getCountryData(`Australia`);
-});
+// btn.addEventListener('click', function () {
+//   getCountryData(`Australia`);
+// });
 // getCountryData(`westeros`);
+/*
+console.log(`Test start`);
 
+setTimeout(() => console.log(`0 sec timer`), 0);
+
+Promise.resolve(`Resolved promise 1`).then(res => console.log(res));
+
+Promise.resolve('Resolved promise 2').then(res => {
+  for (let i = 0; i < 2_100_000_000; i++) {}
+  console.log(res);
+});
+console.log(`Test end`);
+
+
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log(`Lottery draw is happening!`);
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve(`You are winner!`);
+    } else {
+      reject(new Error(`You are loser!`));
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+// Promisifying setTimeout
+const wait = seconds =>
+  new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+wait(1)
+  .then(() => {
+    console.log(`1 second passed`);
+    return wait(1);
+  })
+  .then(() => {
+    console.log(`2 second passed`);
+    return wait(1);
+  })
+  .then(() => {
+    console.log(`3 second passed`);
+    return wait(1);
+  })
+  .then(() => console.log(`4 second passed`));
+
+// setTimeout(() => {
+//   console.log('1 sec passed');
+//   setTimeout(() => {
+//     console.log('Kappa');
+//   }, 1000);
+// }, 1000);
+// setTimeout(() => {
+//   console.log('1 sec passed');
+//   setTimeout(() => {
+//     console.log('Kappa');
+//     setTimeout(() => {
+//       console.log('Kappa x2');
+//       setTimeout(() => {
+//         console.log('AAAAAA');
+//       }, 1000);
+//     }, 1000);
+//   }, 1000);
+// }, 1000);
+
+Promise.resolve(`You won!`).then(x => console.log(x));
+Promise.reject(new Error(`PROBLEM!`)).catch(x => console.log(x));
+
+
+// console.log(`Getting position`);
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err),
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+// getPosition()
+//   .then(pos => console.log(pos))
+//   .catch(err => console.error(err));
+
+const whereAmI = function () {
+  // let lat, lng;
+  let nameCountry;
+  getPosition()
+    .then(pos => {
+      // console.log(pos);
+      const { latitude: lat, longitude: lng } = pos.coords;
+      console.log(lat, lng);
+      const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
+      console.log(lat, lng);
+      return fetch(newAPI);
+    })
+    .then(response => {
+      // console.log(response);
+      if (!response.ok)
+        throw new Error(`Smth went wrong: (${response.status})`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(`You are in ${data.city}, ${data.countryName}`);
+      // console.log(data);
+      nameCountry = data.countryName;
+      // console.log(nameCountry);
+      // getCountryData(nameCountry);
+      return fetch(
+        `https://countries-api-836d.onrender.com/countries/name/${nameCountry}`,
+      );
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Country not found: ${response.status}`);
+      return response.json();
+    })
+    .then(data => renderCountry(data[0]))
+    .catch(err => console.error(`${err.message}, OH NO`))
+    .finally(() => (countriesContainer.style.opacity = 1));
+  // console.log(nameCountry);
+
+  // getCountryData();
+};
+
+
+
+btn?.addEventListener('click', whereAmI);
+*/
 /////////////////////////////
 // Challenge #1
-
+/*
 // const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
 
 const testCoords = [52.508, 13.381];
@@ -297,3 +426,41 @@ const whereAmI = function (lat, lng) {
 whereAmI(...testCoords);
 whereAmI(...testCoords2);
 whereAmI(...testCoords3);
+*/
+const imgContainer = document.querySelector('.images');
+
+// imgContainer?.append(myImage);
+const wait = seconds =>
+  new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+const createImage = function (imgPath) {
+  const promise = new Promise(function (resolve, reject) {
+    const myImage = document.createElement('img');
+    myImage.src = imgPath;
+    myImage.addEventListener('load', function () {
+      imgContainer?.append(myImage);
+      resolve(myImage);
+    });
+
+    myImage.addEventListener('error', function () {
+      reject(new Error(`Smth went wrong!`));
+    });
+  });
+  return promise;
+};
+let currentImg;
+createImage(`img/img-1.jpg`)
+  .then(img => {
+    currentImg = img;
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage(`img/img-2.jpg`);
+  })
+  .then(img => {
+    currentImg = img;
+    return wait(2);
+  })
+  .then(() => (currentImg.style.display = 'none'))
+  .catch(err => console.error(err));
