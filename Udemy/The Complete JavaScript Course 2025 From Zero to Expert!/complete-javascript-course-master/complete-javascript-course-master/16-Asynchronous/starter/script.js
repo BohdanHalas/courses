@@ -14,7 +14,7 @@ const countriesContainer = document.querySelector('.countries');
 ///////////////////////////////////////
 const renderError = function (msg) {
   countriesContainer?.insertAdjacentText('beforeend', msg);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 
 const noNeighbours = function () {
@@ -33,7 +33,7 @@ const renderCountry = function (data, className = '') {
           </div>
         </article>`;
   countriesContainer?.insertAdjacentHTML('beforeend', html);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 /*
 
@@ -379,8 +379,158 @@ const whereAmI = function () {
 
 
 btn?.addEventListener('click', whereAmI);
+
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+//   fetch(
+//     `https://countries-api-836d.onrender.com/countries/name/${country}`,
+//   ).then(response => console.log(response));
+
+const whereAmI = async function () {
+  try {
+    // Geolocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
+
+    // Reverse geocoding
+    const resGeo = await fetch(newAPI);
+    if (!resGeo.ok) throw new Error(`Problem getting location data`);
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
+
+    // Country data
+    const response = await fetch(
+      `https://countries-api-836d.onrender.com/countries/name/${dataGeo.countryName}`,
+    );
+    if (!response.ok) throw new Error(`Problem getting country`);
+    // console.log(response);
+    const data = await response.json();
+    // console.log(data[0]);
+    renderCountry(data[0]);
+    return `You are in ${dataGeo.city}`;
+  } catch (err) {
+    console.log(`${err} Kappa`);
+    renderError('Smth went wrong');
+
+    // Reject promise from async function
+    throw err;
+  }
+};
+console.log(`1: Will get location`);
+// const city = whereAmI();
+// console.log(city);
+
+// whereAmI()
+//   .then(city => console.log(city))
+//   .catch(err => console.error(`${err} WTF?`))
+//   .finally(() => console.log(`2: Finished getting location`));
+(async function () {
+  try {
+    const response = await whereAmI();
+    console.log(response);
+  } catch (err) {
+    console.error(`${err} WTF?`);
+  }
+  console.log(`2: Finished getting location`);
+})();
+
+// console.log(`FIRST`);
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   y = 3;
+// } catch (err) {
+//   console.log(err);
+// }
+
+
+const getThreeCountries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(
+    //   `https://countries-api-836d.onrender.com/countries/name/${c1}`,
+    // );
+    // const [data2] = await getJSON(
+    //   `https://countries-api-836d.onrender.com/countries/name/${c2}`,
+    // );
+    // const [data3] = await getJSON(
+    //   `https://countries-api-836d.onrender.com/countries/name/${c3}`,
+    // );
+
+    const data = await Promise.all([
+      getJSON(`https://countries-api-836d.onrender.com/countries/name/${c1}`),
+      getJSON(`https://countries-api-836d.onrender.com/countries/name/${c2}`),
+      getJSON(`https://countries-api-836d.onrender.com/countries/name/${c3}`),
+    ]);
+    // console.log([data1.capital, data2.capital, data3.capital]);
+    // console.log(data);
+    console.log(data.map(data => data[0].capital));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getThreeCountries(`ukraine`, `spain`, `canada`);
+
+
+// Promise.race
+(async function () {
+  const response = await Promise.race([
+    getJSON(`https://countries-api-836d.onrender.com/countries/name/ukraine`),
+    getJSON(`https://countries-api-836d.onrender.com/countries/name/spain`),
+    getJSON(`https://countries-api-836d.onrender.com/countries/name/denmark`),
+  ]);
+  console.log(response[0]);
+})();
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error(`Time is out`));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getJSON(`https://countries-api-836d.onrender.com/countries/name/denmark`),
+  timeout(1),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.log(err));
+
+// Promise.allSettled
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('One More Success'),
+]).then(res => console.log(res));
+
+Promise.all([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('One More Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
+
+// Promise.any [ES2021] Як race але ігноруються відкинуті
+
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('One More Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 */
+
 /////////////////////////////
+/////////////////////////////
+
 // Challenge #1
 /*
 // const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
@@ -426,7 +576,9 @@ const whereAmI = function (lat, lng) {
 whereAmI(...testCoords);
 whereAmI(...testCoords2);
 whereAmI(...testCoords3);
-*/
+
+////////////////////
+// Challenge #2
 const imgContainer = document.querySelector('.images');
 
 // imgContainer?.append(myImage);
@@ -464,3 +616,49 @@ createImage(`img/img-1.jpg`)
   })
   .then(() => (currentImg.style.display = 'none'))
   .catch(err => console.error(err));
+*/
+/////////////////////////
+
+// Challenge # 3
+
+const imgContainer = document.querySelector('.images');
+
+const wait = seconds =>
+  new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+let currentImg;
+
+const createImage = function (imgPath) {
+  const promise = new Promise(function (resolve, reject) {
+    const myImage = document.createElement('img');
+    myImage.src = imgPath;
+    myImage.addEventListener('load', function () {
+      imgContainer?.append(myImage);
+      resolve(myImage);
+    });
+
+    myImage.addEventListener('error', function () {
+      reject(new Error(`Smth went wrong!`));
+    });
+  });
+  return promise;
+};
+
+const loadAndPause = async function () {
+  try {
+    const img1 = await createImage(`img/img-1.jpg`);
+    await wait(2);
+    img1.style.display = 'none';
+
+    const img2 = await createImage(`img/img-2.jpg`);
+    await wait(2);
+    img2.style.display = 'none';
+
+    const img3 = await createImage(`img/img-3.jpg`);
+    await wait(2);
+    img3.style.display = 'none';
+  } catch (err) {
+    err => console.error(err);
+  }
+};
+loadAndPause();
