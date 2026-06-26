@@ -678,4 +678,97 @@
 // SOME PRACTICE
 
 const url =
-  'https://ddragon.leagueoflegends.com/cdn/26.13.1/data/en_US/champion.json';
+  'https://ddragon.leagueoflegends.com/cdn/16.13.1/data/en_US/champion.json';
+
+(async () => {
+  // const versionsRes = await fetch(
+  //   'https://ddragon.leagueoflegends.com/api/versions.json',
+  // );
+  // const versions = await versionsRes.json();
+  // // Беремо найперший елемент масиву (це завжди найсвіжіший патч)
+  // const latestPatch = versions[0];
+  // console.log(`Поточний патч Ліги: ${latestPatch}`);
+  // const url = `https://ddragon.leagueoflegends.com/cdn/${latestPatch}/data/en_US/champion.json`;
+  // const dataLOLResponse = await fetch(url);
+  // const dataLOL = await dataLOLResponse.json();
+  // const { Ekko } = dataLOL.data;
+  // console.log(dataLOL);
+  // console.log(Object.keys(dataLOL));
+})();
+
+class ChampionAPIAnalyzer {
+  #currentPatch;
+  #language;
+  constructor(language = `en_US`) {
+    this.#language = language;
+    this.#currentPatch = null;
+  }
+  // Асинхронна функція отримання даних про останній патч
+  async getLatestPatch() {
+    try {
+      const versionsResponse = await fetch(
+        'https://ddragon.leagueoflegends.com/api/versions.json',
+      );
+      const versions = await versionsResponse.json();
+      const latestPatch = versions[0];
+      this.#currentPatch = latestPatch;
+      console.log(`Поточний патч Ліги Легенд: ${latestPatch}`);
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+    }
+    return this;
+  }
+
+  // Асинхронна функція отримання даних конкретного чемпіона
+  async fetchChampionData(championName) {
+    try {
+      if (!this.#currentPatch) {
+        await this.getLatestPatch();
+      }
+      const response = await fetch(
+        `https://ddragon.leagueoflegends.com/cdn/${this.#currentPatch}/data/${this.#language}/champion.json`,
+      );
+      if (!response.ok) throw new Error(`Can't get data from this API`);
+      const championData = await response.json();
+      const ourChampionData = championData.data[championName];
+      if (!ourChampionData) throw new Error(`This champion doesn't exist!`);
+      console.log(ourChampionData);
+      return ourChampionData;
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+      throw err;
+    }
+  }
+
+  // Асинхронна функція порівняння здоров'я двох чемпіонів
+  async compareChampionsHP(firstChampionName, secondChampionName) {
+    try {
+      if (!this.#currentPatch) {
+        await this.getLatestPatch();
+      }
+      const championsPromises = [];
+      championsPromises.push(this.fetchChampionData(firstChampionName));
+      championsPromises.push(this.fetchChampionData(secondChampionName));
+      const champions = await Promise.all(championsPromises);
+      const [firstChampion, secondChampion] = champions;
+      const firstChampionTrueName = firstChampion.name;
+      const secondChampionTrueName = secondChampion.name;
+      const firstChampionHP = firstChampion.stats.hp;
+      const secondChampionHP = secondChampion.stats.hp;
+
+      console.log(
+        firstChampionHP > secondChampionHP
+          ? `${firstChampionTrueName} має більше базового здоров'я (${firstChampionHP}) ніж ${secondChampionTrueName} (${secondChampionHP})`
+          : `${firstChampionTrueName} немає більше базового здоров'я (${firstChampionHP}) ніж ${secondChampionTrueName} (${secondChampionHP})`,
+      );
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+    }
+  }
+}
+
+const appAnalyzer = new ChampionAPIAnalyzer();
+// appAnalyzer.getLatestPatch();
+// appAnalyzer.fetchChampionData(`Ek1ko`);
+// appAnalyzer.fetchChampionData(`Ekko`);
+appAnalyzer.compareChampionsHP(`Ekko`, `Viego`);
