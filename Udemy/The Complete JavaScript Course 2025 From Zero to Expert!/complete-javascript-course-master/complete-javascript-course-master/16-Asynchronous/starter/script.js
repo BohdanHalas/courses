@@ -35,7 +35,7 @@
 //   countriesContainer?.insertAdjacentHTML('beforeend', html);
 //   countriesContainer.style.opacity = 1;
 // };
-// /*
+/*
 
 // const getCountryData = function (country) {
 //   const request = new XMLHttpRequest();
@@ -524,9 +524,9 @@
 // /////////////////////////////
 // /////////////////////////////
 
-// // Challenge #1
-// /*
-// // const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
+// Challenge #1
+
+// const newAPI = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`;
 
 // const testCoords = [52.508, 13.381];
 // const testCoords2 = [19.037, 72.873];
@@ -562,7 +562,7 @@
 //     .then(data => renderCountry(data[0]))
 //     .catch(err => console.error(`${err.message}, OH NO`))
 //     .finally(() => (countriesContainer.style.opacity = 1));
-//   // console.log(nameCountry);
+//   console.log(nameCountry);
 
 //   // getCountryData();
 // };
@@ -771,4 +771,8 @@ const appAnalyzer = new ChampionAPIAnalyzer();
 // appAnalyzer.getLatestPatch();
 // appAnalyzer.fetchChampionData(`Ek1ko`);
 // appAnalyzer.fetchChampionData(`Ekko`);
-appAnalyzer.compareChampionsHP(`Ekko`, `Viego`);
+// appAnalyzer.compareChampionsHP(`Ekko`, `Viego`);
+
+// appAnalyzer.getLatestPatch();
+// appAnalyzer.fetchChampionData('Jinx');
+// appAnalyzer.compareChampionsHP('Ekko', 'Jinx');
