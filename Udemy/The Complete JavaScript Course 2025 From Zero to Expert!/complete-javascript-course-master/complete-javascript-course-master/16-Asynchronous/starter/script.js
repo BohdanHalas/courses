@@ -767,7 +767,85 @@ class ChampionAPIAnalyzer {
   }
 }
 
+class ChampionRoleAnalyzer {
+  #currentPatch;
+  #language;
+  constructor(language = `en_US`) {
+    this.#language = language;
+    this.#currentPatch = null;
+  }
+
+  // Асинхронна функція отримання даних про останній патч
+  async getLatestPatch() {
+    try {
+      const versionsResponse = await fetch(
+        'https://ddragon.leagueoflegends.com/api/versions.json',
+      );
+      const versions = await versionsResponse.json();
+      const latestPatch = versions[0];
+      this.#currentPatch = latestPatch;
+      console.log(`Поточний патч Ліги Легенд: ${latestPatch}`);
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+    }
+    return this;
+  }
+
+  // Ассинхронна функція для отримання данних всіх чемпіонів
+  async getAllChampions() {
+    try {
+      if (!this.#currentPatch) {
+        await this.getLatestPatch();
+      }
+      const response = await fetch(
+        `https://ddragon.leagueoflegends.com/cdn/${this.#currentPatch}/data/${this.#language}/champion.json`,
+      );
+      if (!response.ok) throw new Error(`Can't get data from this API`);
+      const dataBase = await response.json();
+      const { data } = dataBase;
+      return data;
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+      throw err;
+    }
+  }
+
+  // Ассинхронна функція для пошуку НАЙ чемпіона по ролі та статі
+  async findTopChampionByRole(role, statName) {
+    try {
+      const data = await this.getAllChampions();
+      const allChampions = Object.values(data);
+      console.log(allChampions);
+      const ourChampions = allChampions.filter(champion => {
+        const tags = champion.tags;
+        if (tags.includes(role)) return champion;
+        // champion.tags.includes(role);
+      });
+      if (ourChampions.length === 0) throw new Error(`Wrong role`);
+      const sortedOurChampions = ourChampions.sort(
+        (a, b) => b.stats[statName] - a.stats[statName],
+      );
+      // console.log(sortedOurChampions);
+      const maxStatValue = sortedOurChampions[0].stats[statName];
+      console.log(maxStatValue);
+      const topChampions = sortedOurChampions.filter(
+        champion => champion.stats[statName] === maxStatValue,
+      );
+      topChampions.forEach(champion =>
+        console.log(
+          `${champion.name} має найвищий показник ${statName} серед класу ${role}: ${maxStatValue} одиниць`,
+        ),
+      );
+      // console.log(topChampions);
+    } catch (err) {
+      console.log(`Smth went wrong: ${err}`);
+    }
+  }
+}
 const appAnalyzer = new ChampionAPIAnalyzer();
+const newAppAnalyzer = new ChampionRoleAnalyzer();
+// newAppAnalyzer.getAllChampions();
+newAppAnalyzer.findTopChampionByRole(`Assassin`, `attackdamage`);
 // appAnalyzer.getLatestPatch();
 // appAnalyzer.fetchChampionData(`Ek1ko`);
 // appAnalyzer.fetchChampionData(`Ekko`);
