@@ -3,6 +3,8 @@
 // const btn = document.querySelector('.btn-country');
 // const countriesContainer = document.querySelector('.countries');
 
+const container = document.querySelector('.champions');
+
 // // NEW COUNTRIES API URL (use instead of the URL shown in videos):
 // // https://restcountries.com/v2/name/portugal
 
@@ -841,11 +843,111 @@ class ChampionRoleAnalyzer {
       console.log(`Smth went wrong: ${err}`);
     }
   }
+
+  // Асинхронна функція отримання даних конкретного чемпіона
+  async fetchChampionData(championName) {
+    try {
+      if (!this.#currentPatch) {
+        await this.getLatestPatch();
+      }
+      const response = await fetch(
+        `https://ddragon.leagueoflegends.com/cdn/${this.#currentPatch}/data/${this.#language}/champion/${championName}.json`,
+      );
+      if (!response.ok) throw new Error(`Can't get data from this API`);
+      const championData = await response.json();
+      const ourChampionData = championData.data[championName];
+      if (!ourChampionData) throw new Error(`This champion doesn't exist!`);
+      console.log(ourChampionData);
+      return ourChampionData;
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+      throw err;
+    }
+  }
+
+  // Асинхронна функція для аналізу команди
+  async analyzeTeam(teamArray) {
+    try {
+      // const allChampions = await this.getAllChampions();
+      const promisesArray = teamArray.map(champion =>
+        this.fetchChampionData(champion),
+      );
+      const championsArray = await Promise.all(promisesArray);
+      const allHP = championsArray.reduce(
+        (accumulator, champion) => accumulator + champion.stats.hp,
+        0,
+      );
+      const hasTank = championsArray.some(champion =>
+        champion.tags.includes(`Tank`),
+      );
+      console.log(
+        `Команда зібрана! Загальне здоров'я: ${allHP} HP!\n Аналіз балансу: ${hasTank ? `Все супер! В команді є танк!` : `Обережно, команді бракує танка`}`,
+      );
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+    }
+  }
+
+  // Асинхронна функція для виведення обраного чемпіона на веб-сторінку
+  async renderChampion(championName, skinInput = ``) {
+    try {
+      const champion = await this.fetchChampionData(championName);
+      let ourSkin = skinInput.toLowerCase();
+      console.log(ourSkin);
+      console.log(champion.skins);
+      const targetSkin = champion.skins.find(skin =>
+        skin.name.toLowerCase().includes(ourSkin),
+      );
+      const skinNum = targetSkin ? targetSkin.num : 0;
+      console.log(skinNum);
+      const { name, title, tags, stats, id } = champion;
+      const allTags = tags.join(` `);
+      const hp = stats.hp;
+      const ad = stats.attackdamage;
+      console.log(name, title, allTags, hp, ad, id);
+      const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${id}_${skinNum}.jpg`;
+      const html = `<article class="champion">
+  <img class="champion__img" src="${imgUrl}" alt="${name}" />
+  <div class="champion__data">
+    <h3 class="champion__name">${name}</h3>
+    <h4 class="champion__title">${title}</h4>
+    <p class="champion__row"><span>⚔️</span>${allTags}</p>
+    <p class="champion__row"><span>❤️</span>${hp} Здоров'я</p>
+    <p class="champion__row"><span>🗡️</span>${ad} Атака</p>
+  </div>
+</article>`;
+      // container?.insertAdjacentHTML(`beforeend`, html);
+      container.innerHTML = html;
+      container.style.opacity = 1;
+    } catch (err) {
+      console.error(`Smth went wrong: ${err}`);
+    }
+  }
 }
 const appAnalyzer = new ChampionAPIAnalyzer();
 const newAppAnalyzer = new ChampionRoleAnalyzer();
+
+const searchInput = document.querySelector('.search-input');
+const skinInputField = document.querySelector('.skin-input');
+const searchBtn = document.querySelector('.search-btn');
+const handleSearch = () => {
+  const championName = searchInput.value.trim();
+  const skinName = skinInputField.value.trim();
+  if (!championName) return;
+  newAppAnalyzer.renderChampion(championName, skinName);
+  searchInput.value = '';
+  skinInputField.value = ``;
+};
+
+searchBtn?.addEventListener(`click`, handleSearch);
+[searchInput, skinInputField].forEach(input => {
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+});
+// newAppAnalyzer.analyzeTeam(['Garen', 'Lee1Sin', 'Ahri', 'Jinx', 'Thresh']);
 // newAppAnalyzer.getAllChampions();
-newAppAnalyzer.findTopChampionByRole(`Assassin`, `attackdamage`);
+// newAppAnalyzer.findTopChampionByRole(`Assassin`, `attackdamage`);
 // appAnalyzer.getLatestPatch();
 // appAnalyzer.fetchChampionData(`Ek1ko`);
 // appAnalyzer.fetchChampionData(`Ekko`);

@@ -10,14 +10,17 @@ html {
 }
 
 body {
-  font-family: system-ui;
-  color: #555;
-  background-color: #f7f7f7;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #f0e6d2; /* Світло-бежевий текст, як у клієнті гри */
+  background-color: #010a13; /* Глибокий темно-синій фон */
   min-height: 100vh;
-
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 3rem;
 }
 
 .container {
@@ -26,101 +29,112 @@ body {
   align-items: center;
 }
 
-.countries {
-  /* margin-bottom: 8rem; */
+.champions {
   display: flex;
-
-  font-size: 2rem;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
   opacity: 0;
   transition: opacity 1s;
 }
 
-.country {
-  background-color: #fff;
-  box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
-  font-size: 1.8rem;
-  width: 30rem;
+.champion {
+  background-color: #1e2328;
+  box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.4);
+  width: 28rem;
   border-radius: 0.7rem;
-  margin: 0 3rem;
-  /* overflow: hidden; */
+  border: 1px solid #c8aa6e; /* Золота рамка */
+  overflow: hidden;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
-.neighbour::before {
-  content: 'Neighbour country';
+.champion:hover {
+  transform: translateY(-1rem);
+  box-shadow: 0 2.5rem 6rem rgba(200, 170, 110, 0.2); /* Золоте світіння */
+}
+
+.champion__img {
   width: 100%;
-  position: absolute;
-  top: -4rem;
-
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #888;
-}
-
-.neighbour {
-  transform: scale(0.8) translateY(1rem);
-  margin-left: 0;
-}
-
-.country__img {
-  width: 30rem;
-  height: 17rem;
+  height: 38rem; /* Високий блок, бо арти вертикальні */
   object-fit: cover;
-  background-color: #eee;
-  border-top-left-radius: 0.7rem;
-  border-top-right-radius: 0.7rem;
+  background-color: #111;
+  border-bottom: 2px solid #c8aa6e;
 }
 
-.country__data {
-  padding: 2.5rem 3.75rem 3rem 3.75rem;
+.champion__data {
+  padding: 2.5rem 3rem 3rem 3rem;
+  text-align: center;
 }
 
-.country__name {
+.champion__name {
   font-size: 2.7rem;
   margin-bottom: 0.7rem;
+  color: #c8aa6e;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
-.country__region {
+.champion__title {
   font-size: 1.4rem;
   margin-bottom: 2.5rem;
-  text-transform: uppercase;
-  color: #888;
+  text-transform: capitalize;
+  color: #a09b8c;
 }
 
-.country__row:not(:last-child) {
-  margin-bottom: 1rem;
+.champion__row {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 1.2rem;
 }
 
-.country__row span {
+.champion__row span {
   display: inline-block;
-  margin-right: 2rem;
+  margin-right: 1.5rem;
   font-size: 2.4rem;
 }
 
-.btn-country {
-  border: none;
-  font-size: 2rem;
-  padding: 2rem 5rem;
-  border-radius: 0.7rem;
-  color: white;
-  background-color: orangered;
-  cursor: pointer;
+.champion__row:last-child {
+  margin-bottom: 0;
 }
-
-.images {
+/* Стилі для блоку пошуку */
+.search-box {
+  margin-bottom: 4rem;
   display: flex;
+  gap: 1rem;
 }
 
-.images img {
-  display: block;
-  width: 80rem;
-  margin: 4rem;
+.search-input {
+  padding: 1.2rem 2rem;
+  font-size: 1.8rem;
+  border: 1px solid #c8aa6e;
+  border-radius: 0.5rem;
+  background-color: #1e2328;
+  color: #f0e6d2;
+  outline: none;
+  width: 30rem;
 }
 
-.images img.parallel {
-  width: 40rem;
-  margin: 2rem;
-  border: 3rem solid white;
-  box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
+.search-input::placeholder {
+  color: #888;
+}
+
+.search-btn {
+  padding: 1.2rem 2.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border: 1px solid #c8aa6e;
+  border-radius: 0.5rem;
+  background-color: #c8aa6e;
+  color: #010a13;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.search-btn:hover {
+  background-color: #f0e6d2;
+  border-color: #f0e6d2;
 }
