@@ -1,5 +1,5 @@
 'use strict';
-/*
+
 // Importing module
 
 // import { addToCart, totalPrice as price, tq } from './shoppingCart.js';
@@ -25,7 +25,7 @@ add(`bread`, 5);
 add(`apples`, 4);
 
 console.log(cart);
-
+/*
 // const res = await fetch('https://jsonplaceholder.typicode.com/posts');
 // const data = await res.json();
 
@@ -71,7 +71,9 @@ ShoppingCart2.addToCart('apple', 4);
 ShoppingCart2.addToCart('pizza', 2);
  */
 
-import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+// import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+
+import cloneDeep from 'lodash-es';
 
 const state = {
   cart: [
@@ -89,3 +91,7 @@ const stateDeepClone = cloneDeep(state);
 state.user.loggedIn = false;
 console.log(state);
 console.log(stateDeepClone);
+
+if (module.hot) {
+  module.hot.accept();
+}
