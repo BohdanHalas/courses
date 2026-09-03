@@ -23,16 +23,14 @@ const controlRecipes = async function () {
     // 2) Rendering recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
-    alert(err);
+    recipeView.renderError();
   }
 };
 
 // showRecipe();
 // fetch('https://forkify-api.jonas.io/api/v2/recipes/:id');
 
-['hashchange', 'load'].forEach(event =>
-  window.addEventListener(event, controlRecipes),
-);
-
-// window.addEventListener('hashchange', controlRecipes);
-// window.addEventListener('load', controlRecipes);
+const init = function () {
+  recipeView.addHandlerRender(controlRecipes);
+};
+init();

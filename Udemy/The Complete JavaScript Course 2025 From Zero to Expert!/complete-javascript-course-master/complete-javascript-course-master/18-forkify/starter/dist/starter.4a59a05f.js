@@ -733,16 +733,15 @@ const controlRecipes = async function() {
         // 2) Rendering recipe
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     } catch (err) {
-        alert(err);
+        (0, _recipeViewJsDefault.default).renderError();
     }
 };
 // showRecipe();
 // fetch('https://forkify-api.jonas.io/api/v2/recipes/:id');
-[
-    'hashchange',
-    'load'
-].forEach((event)=>window.addEventListener(event, controlRecipes)); // window.addEventListener('hashchange', controlRecipes);
- // window.addEventListener('load', controlRecipes);
+const init = function() {
+    (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes);
+};
+init();
 
 },{"./model.js":"3QBkH","./views/recipeView.js":"3wx5k","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3QBkH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -770,7 +769,7 @@ const loadRecipe = async function(id) {
         };
         console.log(state.recipe);
     } catch (err) {
-        console.error(`${err} !!!!`);
+        throw err;
     }
 };
 
@@ -850,15 +849,20 @@ console.log((0, _fractyDefault.default));
 class RecipeView {
     #parentElement = document.querySelector('.recipe');
     #data;
+    #errorMessage = `We could not find that recipe. Please try another one! `;
+    #successMessage = 'Success!';
     // constructor();
     render(data) {
         this.#data = data;
         const markup = this.#generateMarkup();
         this.#clear();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+        this.insertMarkup(markup);
     }
     #clear() {
         this.#parentElement.innerHTML = '';
+    }
+    insertMarkup(markup) {
+        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     }
     renderSpinner() {
         const markup = `<div class="spinner">
@@ -867,7 +871,40 @@ class RecipeView {
           </svg>
         </div>`;
         this.#clear();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+        this.insertMarkup(markup);
+    }
+    renderError(message = this.#errorMessage) {
+        const markup = `<div class="error">
+            <div>
+              <svg>
+                <use href="src/img/${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>`;
+        this.#clear();
+        this.insertMarkup(markup);
+    }
+    renderMessage(message = this.#successMessage) {
+        const markup = `<div class="recipe">
+        <div class="message">
+          <div>
+            <svg>
+              <use href="src/img/${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div>`;
+        this.#clear();
+        this.insertMarkup(markup);
+    }
+    addHandlerRender(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((event)=>window.addEventListener(event, handler));
+    // window.addEventListener('hashchange', controlRecipes);
+    // window.addEventListener('load', controlRecipes);
     }
     #generateMarkup() {
         return `<figure class="recipe__fig">
