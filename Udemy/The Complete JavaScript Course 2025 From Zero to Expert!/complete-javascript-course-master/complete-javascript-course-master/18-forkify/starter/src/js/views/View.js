@@ -76,6 +76,7 @@ export default class View {
   }
 
   renderMessage(message = this._successMessage) {
+    console.log(message);
     const markup = `<div class="recipe">
         <div class="message">
           <div>
